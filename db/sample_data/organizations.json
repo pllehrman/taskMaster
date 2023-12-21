@@ -1,0 +1,51 @@
+[
+    {
+        "name": "Urban Development",
+        "description": "Investing in renewable energy",
+        "members": "ObjectId(11)",
+        "founder": "ObjectId(10)",
+        "dateCreated": "2023-12-19T21:13:45.317290"
+    },
+    {
+        "name": "Cultural Exchange",
+        "description": "Bridging cultural gaps",
+        "members": "ObjectId(1)",
+        "founder": "ObjectId(3)",
+        "dateCreated": "2023-12-19T21:13:45.317303"
+    },
+    {
+        "name": "Finance First",
+        "description": "Leading in data-driven solutions",
+        "members": "ObjectId(3)",
+        "founder": "ObjectId(18)",
+        "dateCreated": "2023-12-19T21:13:45.317310"
+    },
+    {
+        "name": "Digital World",
+        "description": "Building a better future",
+        "members": "ObjectId(16)",
+        "founder": "ObjectId(13)",
+        "dateCreated": "2023-12-19T21:13:45.317389"
+    },
+    {
+        "name": "Science Pioneers",
+        "description": "Championing mental health",
+        "members": "ObjectId(16)",
+        "founder": "ObjectId(13)",
+        "dateCreated": "2023-12-19T21:13:45.317398"
+    },
+    {
+        "name": "Global Connect",
+        "description": "Pioneering scientific research",
+        "members": "ObjectId(2)",
+        "founder": "ObjectId(20)",
+        "dateCreated": "2023-12-19T21:13:45.317404"
+    },
+    {
+        "name": "Future Leaders",
+        "description": "Promoting sustainable practices",
+        "members": "ObjectId(2)",
+        "founder": "ObjectId(8)",
+        "dateCreated": "2023-12-19T21:13:45.317409"
+    }
+]

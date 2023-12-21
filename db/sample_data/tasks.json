@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Test Application",
+        "description": "Prepare for the next quarter",
+        "completed": false
+    },
+    {
+        "name": "Organize Files",
+        "description": "Important for professional development",
+        "completed": false
+    },
+    {
+        "name": "Attend Workshop",
+        "description": "Solve the identified issues",
+        "completed": true
+    },
+    {
+        "name": "Review Document",
+        "description": "Outline the main objectives",
+        "completed": true
+    },
+    {
+        "name": "Organize Files",
+        "description": "Summarize key points",
+        "completed": false
+    },
+    {
+        "name": "Create Budget",
+        "description": "Update with the latest info",
+        "completed": true
+    },
+    {
+        "name": "Draft Proposal",
+        "description": "To be done by end of day",
+        "completed": true
+    },
+    {
+        "name": "Design Mockup",
+        "description": "Think out of the box",
+        "completed": false
+    },
+    {
+        "name": "Update Website",
+        "description": "Tidy up before the weekend",
+        "completed": false
+    },
+    {
+        "name": "Attend Workshop",
+        "description": "Complete before Friday",
+        "completed": false
+    },
+    {
+        "name": "Prepare Presentation",
+        "description": "Update with the latest info",
+        "completed": false
+    },
+    {
+        "name": "Analyze Data",
+        "description": "Summarize key points",
+        "completed": false
+    },
+    {
+        "name": "Clean Workspace",
+        "description": "Review and provide feedback",
+        "completed": true
+    },
+    {
+        "name": "Conduct Survey",
+        "description": "Summarize key points",
+        "completed": false
+    },
+    {
+        "name": "Design Mockup",
+        "description": "Critical for the next release",
+        "completed": false
+    },
+    {
+        "name": "Conduct Survey",
+        "description": "Outline the main objectives",
+        "completed": true
+    },
+    {
+        "name": "Brainstorm Ideas",
+        "description": "Outline the main objectives",
+        "completed": true
+    },
+    {
+        "name": "Analyze Data",
+        "description": "Outline the main objectives",
+        "completed": true
+    },
+    {
+        "name": "Create Budget",
+        "description": "Organize into folders",
+        "completed": true
+    },
+    {
+        "name": "Review Document",
+        "description": "Needs creative input",
+        "completed": true
+    }
+]
