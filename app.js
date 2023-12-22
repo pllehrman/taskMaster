@@ -14,7 +14,8 @@ const notFound = require('./middleware/not_found')
 const errorHandlerMiddleware = require('./middleware/error_handler')
 require('dotenv').config()
 
-
+app.use(express.urlencoded({extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 

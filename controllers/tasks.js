@@ -5,12 +5,18 @@ const {createCustomError} = require('../errors/custom_error')
 const getAllTasks = asyncWrapper( async (req,res) => {
     const tasks = await Task.find({})
     // console.log(tasks)
-    res.status(200).render('index', {tasks});
+    res.status(200).render('task/task_index', {tasks});
 } ) 
 
 const createTask = asyncWrapper( async (req,res) =>{
-    const task = await Task.create(req.body)
-    res.status(201).json({task})
+    const { name, description, completed } = req.body;
+    console.log(name, description, completed);
+    // const task = await Task.create(req.body)
+    // res.status(201).json({task})
+})
+
+const renderTaskForm = asyncWrapper( async (req,res) => {
+    res.status(200).render('task/task_form');
 })
 
 const getTask = asyncWrapper(async (req,res,next) =>{
@@ -50,6 +56,7 @@ const deleteTask = asyncWrapper(async (req,res) =>{
 module.exports = {
     getAllTasks,
     createTask,
+    renderTaskForm,
     getTask,
     updateTask,
     deleteTask
