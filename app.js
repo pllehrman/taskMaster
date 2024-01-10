@@ -12,11 +12,13 @@ const organizations = require('./routes/organizations')
 const connectDB = require('./db/connect')
 const notFound = require('./middleware/not_found')
 const errorHandlerMiddleware = require('./middleware/error_handler')
+const expressLayouts = require('express-ejs-layouts');
 require('dotenv').config()
 
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressLayouts);
 app.set('views', path.join(__dirname, 'views'));
 
 

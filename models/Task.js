@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-// Schema for a single Task. Other attributes that are passed as a task object 
-// will not be included.
 
 const TaskSchema = new mongoose.Schema({
     name: { 
@@ -16,7 +14,36 @@ const TaskSchema = new mongoose.Schema({
         trim: true, 
         maxlength: [100, "let's keep it short for now."]
     },
-    
+
+    assigner: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User' //should be current user's id.
+    },
+
+    assignees: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User',
+    }],
+
+    owernship: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization'
+    },
+
+    time_assinged: {
+        type: Date, 
+        default: Date.now
+    },
+
+    time_deadline: {
+        type: Date, 
+    }, 
+
     completed: {
         type:Boolean, 
         default: false

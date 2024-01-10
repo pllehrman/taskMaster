@@ -4,12 +4,20 @@ const {createCustomError} = require('../errors/custom_error')
 
 const getAllOrganizations = asyncWrapper( async (req,res) => {
     const organizations = await Organization.find({})
-    res.status(200).render('homepage', { organizations })
+    res.status(200).render('organization/organization_index', { organizations })
 }) 
 
 const createOrganization = asyncWrapper( async (req,res) =>{
-    const organization = await Organization.create(req.body)
-    res.status(201).json({organization})
+    const { name, description} = req.body
+    const founder = 'current_user.id'
+    const date_created = Date.now();
+    const organization = await Organization.create({name, description, date_created})
+
+    res.redirect('/organization');
+})
+
+const renderOrganizationForm = asyncWrapper( async (req,res) => {
+    res.status(200).render('organization/organization_form');
 })
 
 const getOrganization = asyncWrapper(async (req,res,next) =>{
@@ -47,5 +55,7 @@ const deleteOrganization = asyncWrapper(async (req,res) =>{
 })
 
 module.exports =  {
-    getAllOrganizations
+    getAllOrganizations,
+    renderOrganizationForm,
+    createOrganization
 }

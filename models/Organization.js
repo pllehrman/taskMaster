@@ -19,16 +19,23 @@ const OrganizationSchema = new mongoose.Schema({
         maxlength: [200, 'description must be snappy and short.']
 
     },
-
+    
     members: [{
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
     }], 
 
+    manager: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        //should default to the current user's id.
+    },
+
     founder: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
-        required: true
+        required: false
+        //should default to the current user's id.
     },
 
     dateCreated: {

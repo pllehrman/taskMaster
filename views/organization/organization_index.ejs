@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization List</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Organizations</h1>
+    </header>
+    <main>
+        <div class="organization-container">
+            <a href="/organization/new" class="add-button">Add organization</a>
+            <ul class="organization-list">
+                <% organizations.forEach(function(organization) { %>
+                    <li class="organization-item">
+                        <h2 class="organization-title"><%= organization.name %></h2>
+                        <p class="organization-description"><%= organization.description %></p>
+                        <p class="organization-founder"><%= organization.founder %></p>
+                        <p class="organization-date_created"><%= organization.date_created%></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

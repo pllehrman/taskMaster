@@ -1,4 +1,4 @@
-<%include ('../layout')%>
+<%-include ('../layout')%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,21 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task List</title>
-    <a href="/task/new" class = "add-task-button">Add Task</a>
-    <link rel="stylesheet" href="/css/style.css"> <!-- Assuming you have a CSS file -->
+    <link rel="stylesheet" href="/css/style.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <header>
         <h1>Tasks</h1>
     </header>
     <main>
-        <ul>
-            <% tasks.forEach(function(task) { %>
-                <li><%= task.name %></li> <!-- Displaying each task's name -->
-                <li><%= task.description %></li>
-            <% }); %>
-        </ul>
+        <div class="task-container">
+            <a href="/task/new" class="add-button">Add Task</a>
+            <ul class="task-list">
+                <% tasks.forEach(function(task) { %>
+                    <li class="task-item">
+                        <h2 class="task-title"><%= task.name %></h2>
+                        <p class="task-description"><%= task.description %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
     </main>
 </body>
 </html>
- 

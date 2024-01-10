@@ -10,7 +10,7 @@ const jsonTasks = require('./sample_data/tasks.json')
 const jsonOrganizations = require('./sample_data/organizations.json');
 const jsonUsers = require('./sample_data/users.json')
 
-const start = async () => {
+const seed = async () => {
   try {
     await connectDB(process.env.MONGO_URI) //await connection to the db
 
@@ -44,4 +44,4 @@ const start = async () => {
   }
 }
 
-start()
+seed()

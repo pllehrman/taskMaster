@@ -9,10 +9,11 @@ const getAllTasks = asyncWrapper( async (req,res) => {
 } ) 
 
 const createTask = asyncWrapper( async (req,res) =>{
-    const { name, description, completed } = req.body;
-    console.log(name, description, completed);
-    // const task = await Task.create(req.body)
-    // res.status(201).json({task})
+    const { name, description} = req.body;
+    console.log(name, description);
+    const task = await Task.create( {name, description, completed: false})
+
+    res.redirect('/task');
 })
 
 const renderTaskForm = asyncWrapper( async (req,res) => {
