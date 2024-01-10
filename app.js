@@ -7,7 +7,7 @@ app.set('view engine', 'ejs');
 //importing routes
 const tasks = require('./routes/tasks')
 const organizations = require('./routes/organizations')
-
+const about_contact = require('./routes/about_contact')
 
 const connectDB = require('./db/connect')
 const notFound = require('./middleware/not_found')
@@ -31,6 +31,7 @@ app.get('/', (req,res)=>{
 //Serving other routes
 app.use('/', tasks)
 app.use('/', organizations)
+app.use('/', about_contact)
 
 app.use(notFound)
 app.use(errorHandlerMiddleware)
