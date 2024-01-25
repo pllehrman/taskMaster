@@ -13,7 +13,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
     const date_created = Date.now();
     const organization = await Organization.create({name, description, date_created})
 
-    res.redirect('/organization');
+    res.redirect('/organizations');
 })
 
 const renderOrganizationForm = asyncWrapper( async (req,res) => {

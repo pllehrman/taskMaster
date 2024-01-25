@@ -3,35 +3,30 @@
         "name": "Charlie",
         "email": "user8@example.com",
         "phone": "5649987784",
-        "username": "user8",
         "passwordHash": "40bcb8a3b93b9f14d4261d6aa7b3d36ab0b14670ee6813375b5d03e74f4e3f65"
     },
     {
         "name": "Ivan",
         "email": "user9@test.com",
         "phone": "2614566719",
-        "username": "user9",
         "passwordHash": "f2ddf2778e89c599dfc999b6ba9d3f73405a38f9a08fa0f77b66ce95c8f94974"
     },
     {
         "name": "Fiona",
         "email": "user1@demo.com",
         "phone": "2088885617",
-        "username": "user1",
         "passwordHash": "8483960720ddfc684081186160a3f48250645dda41f96d0528b2b74f1776ef95"
     },
     {
         "name": "David",
         "email": "user1@test.com",
         "phone": "7498433498",
-        "username": "user2",
         "passwordHash": "fd86efd1840d4602a91c8e5e109718105d5951d88137fec403e90aee9eb97ff2"
     },
     {
         "name": "Eve",
         "email": "user3@demo.com",
         "phone": "1972321879",
-        "username": "user3",
         "passwordHash": "c78684c5f48577f37ceec08d9c273b230362a1b36c6f17b8f57b1d51aca50c2e"
     }
 ]

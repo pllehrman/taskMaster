@@ -3,11 +3,11 @@ const router = express.Router();
 
 
 router.get('/about', (req, res) => { 
-    res.render('about_contact/about');
+    res.render('about');
 });
 
 router.get('/contact', (req, res) => {
-    res.render('about_contact/contact_form');
+    res.render('contact_form');
 });
 
 

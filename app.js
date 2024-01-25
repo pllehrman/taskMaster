@@ -1,47 +1,83 @@
-require('./db/connect')
 const express = require('express')
 const app = express();
 const path = require('path');
-app.set('view engine', 'ejs');
+const session = require('express-session');
+
 
 //importing routes
 const tasks = require('./routes/tasks')
 const organizations = require('./routes/organizations')
 const about_contact = require('./routes/about_contact')
+const users = require('./routes/users')
 
+//Database connection
 const connectDB = require('./db/connect')
+
+//Middleware folder imports 
 const notFound = require('./middleware/not_found')
 const errorHandlerMiddleware = require('./middleware/error_handler')
 const expressLayouts = require('express-ejs-layouts');
+const authenticationMiddleware = require('./middleware/auth');
 require('dotenv').config()
 
+// Setting EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); 
+
+//Parsing middleware
 app.use(express.urlencoded({extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+//Serving up static assets
+app.use(express.static(path.join(__dirname, 'public'))); //serving up the static assets
+
+//Layouts
 app.use(expressLayouts);
-app.set('views', path.join(__dirname, 'views'));
 
+//Establishing session middleware
+app.use(session({
+    secret: 'aa;ej;eif', // replace with a real secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // set to true if using https
+  }));
 
-//typical route
+//Setting user as a global variable
+app.use((req, res, next) => {  
+
+    if (req.session && req.session.userId) {
+        const { userId, name, username } = req.session;
+        res.locals.user = { userId, name, username };
+    } else {
+        res.locals.user = null;
+    }
+    console.log(res.locals);
+    next();
+});
+
+//Public routes
 app.get('/', (req,res)=>{
     res.status(200).render('landing');
 })
 
-
-//Serving other routes
-app.use('/', tasks)
-app.use('/', organizations)
 app.use('/', about_contact)
+app.use('/', users)
 
+//Authentication Middleware -> Important for Protected Routes
+app.use(authenticationMiddleware)
+
+//Protected Routes
+app.use('/tasks', tasks)
+app.use('/organizations', organizations)
+
+//Error handling middlware
 app.use(notFound)
 app.use(errorHandlerMiddleware)
 
-
-// app.get('/api/v1/tasks')
-// app.post('/api/v1')
-
+// Establishing the port
 const port = process.env.PORT || 3000
 
+// Starting server
 const start = async () => {
     try {
         await connectDB(process.env.MONGO_URI)

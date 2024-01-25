@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 //This defines the userSchema. Every user must ahve a name, email, phone, 
-// username, and we store their hashed password.
+// and we store their hashed password.
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -17,20 +17,13 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    phone: {
-        type: String,
-        required: [true, 'Please provide a phone number'],
-        trim: true,
-        match: [/\d{10}/, 'Please use a valid phone number (10 digits)']
-    },
-    username: {
-        type: String,
-        required: true,
-        trim: true
-    },
     passwordHash: {
         type: String,
         required: true
+    },
+    dateJoined: {
+        type: Date,
+        default: Date.now
     }
 });
 
@@ -44,7 +37,7 @@ userSchema.methods.setPassword = async function(password) {
 userSchema.methods.validatePassword = async function(password) {
     return bcrypt.compare(password, this.passwordHash);
 };
-
+ 
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

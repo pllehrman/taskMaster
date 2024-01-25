@@ -7,10 +7,9 @@ const {
     createOrganization
 } = require('../controllers/organizations');
 
-const { update } = require('../models/Organization');
 
-router.route('/organization').get(getAllOrganizations).post(createOrganization)
-router.route('/organization/new').get(renderOrganizationForm)
+router.route('/').get(getAllOrganizations).post(createOrganization);
+router.route('/new').get(renderOrganizationForm);
 // router.route('/organization/:id').get(getOrganization).patch(updateTask).delete(deleteTask)
 
 

@@ -1,21 +1,18 @@
 <body>
     <header>
-        <h1>Organizations</h1>
+        <h2>Organization Dashboard</h2>
     </header>
     <main>
-        <div class="organization-container">
-            <a href="/organization/new" class="add-button">Add organization</a>
+        <div class="organization-sidebar">
             <ul class="organization-list">
                 <% organizations.forEach(function(organization) { %>
-                    <li class="organization-item">
-                        <h2 class="organization-title"><%= organization.name %></h2>
-                        <p class="organization-description"><%= organization.description %></p>
-                        <p class="organization-founder"><%= organization.founder %></p>
-                        <p class="organization-date_created"><%= organization.date_created%></p>
+                    <li>
+                        <a href="/organization/<%= organization.id %>">
+                            <%= organization.name %>
+                        </a>
                     </li>
                 <% }); %>
             </ul>
         </div>
     </main>
 </body>
-

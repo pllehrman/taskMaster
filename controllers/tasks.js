@@ -4,13 +4,11 @@ const {createCustomError} = require('../errors/custom_error')
 
 const getAllTasks = asyncWrapper( async (req,res) => {
     const tasks = await Task.find({})
-    // console.log(tasks)
     res.status(200).render('task/task_index', {tasks});
 } ) 
 
 const createTask = asyncWrapper( async (req,res) =>{
     const { name, description} = req.body;
-    console.log(name, description);
     const task = await Task.create( {name, description, completed: false})
 
     res.redirect('/task');
