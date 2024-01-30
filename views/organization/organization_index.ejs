@@ -3,16 +3,15 @@
         <h2>Organization Dashboard</h2>
     </header>
     <main>
-        <div class="organization-sidebar">
-            <ul class="organization-list">
-                <% organizations.forEach(function(organization) { %>
-                    <li>
-                        <a href="/organization/<%= organization.id %>">
-                            <%= organization.name %>
-                        </a>
-                    </li>
-                <% }); %>
-            </ul>
+        <div class="organization-container">
+            <% organizations.forEach(function(organization) { %>
+                <div class="organization-box">
+                    <a href="/organization/<%= organization.id %>">
+                        <%= organization.name %>
+                    </a>
+                </div>
+            <% }); %>
         </div>
     </main>
 </body>
+

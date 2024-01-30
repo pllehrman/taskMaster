@@ -149,17 +149,6 @@ section {
 
 /* SIDEBAR */
 
-.organization-sidebar {
-    width: 15vh; /* Adjust the width as needed */
-    height: calc(100vh - 62px - 30px); /* Adjusted height */
-    position: absolute;
-    left: 0;
-    top: 62px;
-    background-color: #124605;
-    color: white;
-    padding: 22px;
-    overflow-y: auto;
-}
 
 .organization-list {
     list-style-type: none; /* Remove default list styling */
@@ -185,9 +174,23 @@ section {
 
 .organization-container {
     display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust the spacing between boxes */
     padding: 10px;
+}
+
+.organization-box {
+    background-color: #f2f2f2; /* Light grey background, can be changed */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
+    text-align: center; /* Center the text */
+}
+
+.organization-box a {
+    text-decoration: none;
+    color: #333; /* Dark text color, can be changed */
+    font-weight: bold;
 }
 
 .organization-item {

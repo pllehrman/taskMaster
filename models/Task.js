@@ -25,7 +25,7 @@ const TaskSchema = new mongoose.Schema({
         ref: 'User',
     }],
 
-    owernship: {
+    ownership: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },

@@ -6,16 +6,15 @@ const session = require('express-session');
 // user signing up
 const createUser = asyncWrapper(async (req, res, next) => {
     const { name } = req.body;
-    const demo_id = String(await User.generateDemoID()) //needs to be casted as a string
 
-    const user = new User({ name, demo_id }); // creating the new user
-    user.save() //saves the user to the datatbase.
+    const user = new User({ name }); // creating the new user. Demo_id generated automatically
+    await user.save() //saves the user to the datatbase.
 
     // Establishing the session variables
     req.session.name = user.name;
-    req.session.demo_id = demo_id;
+    req.session.demo_id = user.demo_id;
 
-    res.render('user/thankyou', { name: user.name, demo_id: demo_id });
+    res.render('user/thankyou', { name: user.name, demo_id: user.demo_id });
 
 });
 

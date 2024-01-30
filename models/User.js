@@ -11,19 +11,24 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     demo_id: {
-        type: String,
-        required: [true, 'Session needs an id.']
+        type: String
     },
     date_joined: {
         type: Date,
         default: Date.now
+    },
+    fake: {
+        type: Boolean,
+        default: false
     }
 });
 
-// Method to generate sessionID
-userSchema.statics.generateDemoID = async function() {
-    return Math.floor(1000 + Math.random() * 9000)
-}
+userSchema.pre('save', async function(next) {
+    if (this.isNew) {
+        this.demo_id = Math.floor(1000 + Math.random() * 9000).toString();
+    }
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
 
