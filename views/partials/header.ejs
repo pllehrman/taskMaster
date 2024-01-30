@@ -1,19 +1,25 @@
 <div class="header">
     <div class="header-left">
-        <h1><a href='/' class='home-link'>taskMaster</a></h1>
+        <h1>
+            <a href='/' class='home-link'>taskMaster</a>
+            <% if (demo_id) { %>
+                <span class="demo-id">Demo ID: <%= demo_id %></span>
+            <% } %>
+        </h1>
     </div>
     <div class="header-right">
-        <% if (user) { %>
+        <% if (demo_id) { %>
             <a href="/organizations">Dashboard</a>
         <% } %>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
-        <% if (user) { %>
-            <div>Welcome, <strong><%= user.name %></strong>!</div>
+        <% if (demo_id) { %>
+            <div>Welcome, <strong><%= name %></strong>!</div>
             <a href="/logout">Logout</a>
         <% } %>
-        <% if (!user) {%>
-        <a href="/signup" class='green-bubble-button'>Start Demo</a>
+        <% if (!demo_id) { %>
+            <a href="/signup" class='green-bubble-button'>Start Demo</a>
+            <a href="/login"> Restart Demo</a>
         <% } %>
     </div>
 </div>

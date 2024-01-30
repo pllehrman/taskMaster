@@ -2,7 +2,7 @@ const UnauthenticatedError = require('../errors/unauthenticated');
 
 const authenticationMiddleware = async (req, res, next) => {
   // Check if the user's session has an authenticated user's ID (or another identifier)
-  if (req.session && req.session.userId) {
+  if (req.session && req.session.name) {
     try {
       // You can add additional checks here if needed, e.g., fetching user details
       // from the database and attaching them to the request object.

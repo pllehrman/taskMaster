@@ -44,14 +44,15 @@ app.use(session({
 
 //Setting user as a global variable
 app.use((req, res, next) => {  
-
-    if (req.session && req.session.userId) {
-        const { userId, name, username } = req.session;
-        res.locals.user = { userId, name, username };
+    if (req.session && req.session.demo_id) {
+        const {name, demo_id}= req.session;
+        res.locals.demo_id= demo_id;
+        res.locals.name = name;
     } else {
-        res.locals.user = null;
+        res.locals.name = null;
+        res.locals.demo_id = null;
+
     }
-    console.log(res.locals);
     next();
 });
 

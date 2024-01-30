@@ -10,6 +10,6 @@ const {
 
 router.route('/signup').get(renderSignUp).post(createUser);
 router.route('/login').get(renderLogIn).post(validate);
-router.route('/logout').post(exitUser)
+router.route('/logout').get(exitUser)
 
 module.exports = router;

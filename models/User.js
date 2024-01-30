@@ -10,34 +10,21 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please provide a name'],
         trim: true
     },
-    email: {
+    demo_id: {
         type: String,
-        required: [true, 'Please provide an email'],
-        unique: [true, "It seems like you've already registered with us."],
-        trim: true,
-        lowercase: true
+        required: [true, 'Session needs an id.']
     },
-    passwordHash: {
-        type: String,
-        required: true
-    },
-    dateJoined: {
+    date_joined: {
         type: Date,
         default: Date.now
     }
 });
 
-// Method to set the hashed password
-userSchema.methods.setPassword = async function(password) {
-    const salt = await bcrypt.genSalt();
-    this.passwordHash = await bcrypt.hash(password, salt);
-};
+// Method to generate sessionID
+userSchema.statics.generateDemoID = async function() {
+    return Math.floor(1000 + Math.random() * 9000)
+}
 
-// Method to validate the password
-userSchema.methods.validatePassword = async function(password) {
-    return bcrypt.compare(password, this.passwordHash);
-};
- 
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
