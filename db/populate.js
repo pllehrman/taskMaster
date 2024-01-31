@@ -33,9 +33,8 @@ const seedOrganizations = async (usersArr) => {
     await Organization.deleteMany();
     for (const orgData of jsonOrganizations) {
 
-      randomUserIndex = Math.floor(Math.random (usersArr.length));
+      randomUserIndex = Math.floor(Math.random() * usersArr.length);
       const randomUser = usersArr[randomUserIndex];
-
       orgData.manager = randomUser._id 
       orgData.founder = randomUser._id
 
@@ -53,7 +52,6 @@ const seedOrganizations = async (usersArr) => {
 
 const seedTasks = async () => {
   try {
-    await Task.deleteMany();
     await Task.create(jsonTasks);
     console.log('Success! Database seeded.');
   } catch (err) {

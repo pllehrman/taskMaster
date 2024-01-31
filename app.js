@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 
 //Public routes
 app.get('/', (req,res)=>{
-    res.status(200).render('landing');
+    res.status(200).render('about');
 })
 
 app.use('/', about_contact)

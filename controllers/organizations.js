@@ -3,7 +3,7 @@ const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom_error')
 
 const getAllOrganizations = asyncWrapper( async (req,res) => {
-    const organizations = await Organization.find({})
+    const organizations = await Organization.getAllOrganizationsWithManagers()
     res.status(200).render('organization/organization_index', { organizations })
 }) 
 

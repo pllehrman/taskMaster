@@ -44,6 +44,34 @@ const OrganizationSchema = new mongoose.Schema({
     }
 });
 
+OrganizationSchema.statics.getAllOrganizationsWithManagers = async function() {
+    return this.aggregate([
+        {
+            $lookup: {
+                from: 'users', // assuming 'users' is the name of your User collection
+                localField: 'manager', // field in Organization schema
+                foreignField: '_id', // field in User schema
+                as: 'managerDetails' // array containing the joined documents
+            }
+        },
+        {
+            $unwind: {
+                path: '$managerDetails',
+                preserveNullAndEmptyArrays: true // keeps organizations without a manager
+            }
+        }, 
+        {
+            $project: {
+                name: 1, // keeps the organization name
+                description: 1, // keeps the organization description
+                members: 1, // keeps the organization members
+                managerName: '$managerDetails.name', // extracts the manager's name
+                founder: 1,
+                dateCreated: 1
+            }
+        }
+    ]);
+}
 
 
 module.exports = mongoose.model('Organization', OrganizationSchema)

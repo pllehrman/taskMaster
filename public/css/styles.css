@@ -36,12 +36,12 @@
 
 }
 
-.header-right a{
+.header-right-a {
     text-decoration: none;
     color: black;
 }
 
-.header-right a:hover {
+.header-right-a:hover {
     color: #077227;
     text-decoration: underline;
 }
@@ -67,14 +67,24 @@ h2 {
     color: #666;
 }
 
+.org-header-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.organization-header {
+    background-color: green;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    width: 28%;
+    margin: 20px;
+    text-align: center;
+}
+
 
 
 /* MAIN CONTENT */
-
-html, body {
-    height: 100%;
-    margin: 0;
-}
 
 body {
     font-family: Bitter;
@@ -83,7 +93,7 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 98.25vh;
 }
 
 main {
@@ -113,7 +123,10 @@ label {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 120px);
+}
+
+.justify-text {
+    text-align: justify;
 }
 
 
@@ -134,17 +147,23 @@ section {
     background-color: #f8f9fa;
 }
 
-.about-section {
+/* This centers the text in the middle of the page. */
+.centered-section {
     text-align: center;
     max-width: 600px;
     padding: 20px;
+    border: 2px solid green;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: auto; /* Center horizontally */
+    margin-top: 10vh; /* Center vertically on the page */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
-.cta-section {
-    padding: 20px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
+.centered-section:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* SIDEBAR */
@@ -169,37 +188,48 @@ section {
 
 .content {
     margin-left: 250px; /* Same as sidebar width */
-    padding: 30px; /* Add some padding */
+    padding: 30px;
+    flex-grow: 1; /* Add some padding */
 }
 
 .organization-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 20px; /* Adjust the spacing between boxes */
+    gap: 20px;
     padding: 10px;
 }
 
 .organization-box {
-    background-color: #f2f2f2; /* Light grey background, can be changed */
-    border-radius: 15px; /* Rounded corners */
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
-    text-align: center; /* Center the text */
-}
-
-.organization-box a {
     text-decoration: none;
-    color: #333; /* Dark text color, can be changed */
-    font-weight: bold;
+    color: black;
+    background-color: #f2f2f2;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: auto; /* Adjusted to auto for dynamic height */
+    margin: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This will push the details to the bottom */
 }
 
-.organization-item {
-    flex: none; /* Prevents the items from growing or shrinking */
-    margin-right: 10px; /* Spacing between items */
-    /* Additional styling for the items (size, border, etc.) */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.organization-box:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.organization-name {
+    text-align: center;
+    font-weight: 900;
+    font-size: larger;
+}
+
+.organization-details {
+    text-align: left;
 }
 
 /* FORM */
@@ -236,13 +266,20 @@ button:hover {
     background-color: #0056b3;
 }
 
-.cta-button {
-    background-color: white;
-    color: #007bff;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
+.submit-button {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     font-weight: bold;
+    transition: background-color 0.3s;
+    font: inherit;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
 }
 
 .add-button {
@@ -255,9 +292,8 @@ button:hover {
     margin-top: 10px;
 }
 
-.green-bubble-button {
-    background-color: green; /* Green background */
-    color: black; /* White text */
+/* Base class for shared properties */
+.bubble-button {
     padding: 10px 20px; /* Top & bottom padding, Left & right padding */
     text-decoration: none; /* Remove underline from links */
     border-radius: 25px; /* Rounded corners for the bubble effect */
@@ -266,11 +302,44 @@ button:hover {
     transition: background-color 0.3s, transform 0.1s; /* Smooth transition for hover effects */
 }
 
-.green-bubble-button:hover {
-    background-color: darkgreen; /* Darker green when hovered */
-    color: white;
+/* Specific class for green button */
+.green-bubble-button {
+    background-color: green; /* Green background */
+    color: white; /* Text color for normal state */
 }
 
+.green-bubble-button:hover,
 .green-bubble-button:active {
-    transform: scale(0.95); /* Slightly shrink when clicked */
+    color: white; /* Text color on hover and active */
+    background-color: darkgreen; /* Background color on hover and active */
+}
+
+/* Specific class for blue button */
+.blue-bubble-button {
+    background-color: blue; /* Blue background */
+    color: white; /* Text color for normal state */
+}
+
+.blue-bubble-button:hover,
+.blue-bubble-button:active {
+    color: white; /* Text color on hover and active */
+    background-color: darkblue; /* Background color on hover and active */
+}
+
+.join-button {
+    position: fixed;
+    bottom: 60px;
+    right: 30px;
+    background-color: green; /* Color matching your header, or another color */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Optional: for rounded corners */
+    font-size: 2.5em; /* Larger '+' symbol */
+    padding: 15px 20px;
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    text-decoration: none;
+}
+
+.join-button:hover {
+    background-color: darkgreen; /* Slightly darker color on hover */
 }
