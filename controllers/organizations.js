@@ -1,11 +1,32 @@
 const Organization = require('../models/Organization')
 const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom_error')
+const session = require('express-session');
 
 const getAllOrganizations = asyncWrapper( async (req,res) => {
-    const organizations = await Organization.getAllOrganizationsWithManagers()
-    res.status(200).render('organization/organization_index', { organizations })
+    const user_id = req.session.user_id;
+
+    const organizations = await Organization.getAllOrganizationsWithManagers(user_id);
+    res.status(200).render('organization/organization_index', { organizations });
 }) 
+
+const joinOrganization = asyncWrapper(async (req,res) => {
+    const orgID = req.params; // this is the string corresponding to the organization id
+    const user_id = req.session.user_id // this is the raw MongoDB ObjectID
+
+    console.log(orgID, user_id);
+    // const organization = await Organization.joinOrganization(orgID, user_id)
+
+    res.redirect('/organizations');
+})
+
+const renderJoinOrganization = asyncWrapper(async (req,res) => {
+    const user_id = req.session.user_id;
+
+    const organizations = await Organization.findOpenOrganizations(user_id);
+    
+    res.status(200).render('organization/organization_join_index.ejs', {organizations});
+})
 
 const createOrganization = asyncWrapper( async (req,res) =>{
     const { name, description} = req.body
@@ -57,5 +78,7 @@ const deleteOrganization = asyncWrapper(async (req,res) =>{
 module.exports =  {
     getAllOrganizations,
     renderOrganizationForm,
-    createOrganization
+    createOrganization,
+    joinOrganization,
+    renderJoinOrganization
 }

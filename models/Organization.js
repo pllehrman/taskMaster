@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 // SCHEMA FOR AN ORGANIZATION: name, description, 
 // array of members, founding member, date_created
 
@@ -38,14 +39,26 @@ const OrganizationSchema = new mongoose.Schema({
         //should default to the current user's id.
     },
 
+    private: {
+        type: Boolean,
+        default: false
+    },
+
     dateCreated: {
         type: Date,
         default: Date.now
     }
 });
 
-OrganizationSchema.statics.getAllOrganizationsWithManagers = async function() {
+OrganizationSchema.statics.getAllOrganizationsWithManagers = async function(currentUserId) {
+    const userId = mongoose.Types.ObjectId(currentUserId);
+
     return this.aggregate([
+        {
+            $match: {
+                members: userId // filters to include only organizations where the current user is a member
+            }
+        },
         {
             $lookup: {
                 from: 'users', // assuming 'users' is the name of your User collection
@@ -71,7 +84,41 @@ OrganizationSchema.statics.getAllOrganizationsWithManagers = async function() {
             }
         }
     ]);
+};
+
+OrganizationSchema.statics.findOpenOrganizations = async function(currentUserId) {
+    const user_id = mongoose.Types.ObjectId(currentUserId);
+
+    return this.find({
+        members: { $nin: [user_id] },
+        private: false
+    });
+};
+
+
+
+async function joinOrganization(organizationId, memberObjectId) {
+    try {
+        const result = await Organization.updateOne(
+            { _id: mongoose.Types.ObjectId(organizationId) },
+            { $addToSet: { members: mongoose.Types.ObjectId(memberObjectId) } }
+        );
+
+        if (result.modifiedCount === 0) {
+            console.log("Member was already in the organization or organization not found.");
+        } else {
+            console.log("Member was successfully added to the organization.");
+        }
+        return result;
+    } catch (error) {
+        console.error('Error adding member to the organization:', error);
+        throw error;
+    }
 }
+
+
+
+
 
 
 module.exports = mongoose.model('Organization', OrganizationSchema)

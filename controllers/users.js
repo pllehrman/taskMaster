@@ -13,6 +13,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
     // Establishing the session variables
     req.session.name = user.name;
     req.session.demo_id = user.demo_id;
+    req.session.user_id = user._id
 
     res.render('user/thankyou', { name: user.name, demo_id: user.demo_id });
 
@@ -38,6 +39,7 @@ const validate = asyncWrapper(async (req, res, next) => {
     // Establishing the session variables
     req.session.name = user.name;
     req.session.demo_id = demo_id;
+    req.session.user_id = user._id;
 
     res.render('user/welcome_back', { name: user.name, demo_id: demo_id });
 });
