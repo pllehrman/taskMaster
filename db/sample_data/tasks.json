@@ -1,102 +1,123 @@
 [
     {
         "name": "Test Application",
-        "description": "Prepare for the next quarter",
-        "completed": false
+        "description": "Prepare for the next quarter"
     },
     {
         "name": "Organize Files",
-        "description": "Important for professional development",
-        "completed": false
+        "description": "Important for professional development"
     },
     {
         "name": "Attend Workshop",
-        "description": "Solve the identified issues",
-        "completed": true
+        "description": "Solve the identified issues"
     },
     {
         "name": "Review Document",
-        "description": "Outline the main objectives",
-        "completed": true
+        "description": "Outline the main objectives"
     },
     {
         "name": "Organize Files",
-        "description": "Summarize key points",
-        "completed": false
+        "description": "Summarize key points"
     },
     {
         "name": "Create Budget",
-        "description": "Update with the latest info",
-        "completed": true
+        "description": "Update with the latest info"
     },
     {
         "name": "Draft Proposal",
-        "description": "To be done by end of day",
-        "completed": true
+        "description": "To be done by end of day"
     },
     {
         "name": "Design Mockup",
-        "description": "Think out of the box",
-        "completed": false
+        "description": "Think out of the box"
     },
     {
         "name": "Update Website",
-        "description": "Tidy up before the weekend",
-        "completed": false
+        "description": "Tidy up before the weekend"
     },
     {
         "name": "Attend Workshop",
-        "description": "Complete before Friday",
-        "completed": false
+        "description": "Complete before Friday"
     },
     {
         "name": "Prepare Presentation",
-        "description": "Update with the latest info",
-        "completed": false
+        "description": "Update with the latest info"
     },
     {
         "name": "Analyze Data",
-        "description": "Summarize key points",
-        "completed": false
+        "description": "Summarize key points"
     },
     {
         "name": "Clean Workspace",
-        "description": "Review and provide feedback",
-        "completed": true
+        "description": "Review and provide feedback"
     },
     {
         "name": "Conduct Survey",
-        "description": "Summarize key points",
-        "completed": false
+        "description": "Summarize key points"
     },
     {
         "name": "Design Mockup",
-        "description": "Critical for the next release",
-        "completed": false
+        "description": "Critical for the next release"
     },
     {
         "name": "Conduct Survey",
-        "description": "Outline the main objectives",
-        "completed": true
+        "description": "Outline the main objectives"
     },
     {
         "name": "Brainstorm Ideas",
-        "description": "Outline the main objectives",
-        "completed": true
+        "description": "Outline the main objectives"
     },
     {
         "name": "Analyze Data",
-        "description": "Outline the main objectives",
-        "completed": true
+        "description": "Outline the main objectives"
     },
     {
         "name": "Create Budget",
-        "description": "Organize into folders",
-        "completed": true
+        "description": "Organize into folders"
     },
     {
         "name": "Review Document",
-        "description": "Needs creative input",
-        "completed": true
+        "description": "Needs creative input"
+    },
+    {
+        "name": "Operation Cupcake",
+        "description": "Infiltrate the kitchen and replace all healthy snacks with cupcakes. Stealth is key!"
+    },
+    {
+        "name": "Dinosaur Discovery",
+        "description": "Find and categorize all 'dinosaur bones' (aka chicken bones) in the backyard excavation site."
+    },
+    {
+        "name": "Alien Communication",
+        "description": "Develop a new language consisting entirely of emojis to communicate with hypothetical aliens."
+    },
+    {
+        "name": "Superhero Summit",
+        "description": "Organize a meeting with all neighborhood superheroes. Dress code: Capes and masks only."
+    },
+    {
+        "name": "Zombie Apocalypse Drill",
+        "description": "Conduct a readiness drill for a zombie apocalypse. Bonus points for convincing the cat to participate."
+    },
+    {
+        "name": "Time Travel Experiment",
+        "description": "Attempt to time travel by spinning around really fast. Document any centuries visited."
+    },
+    {
+        "name": "Invisible Ink Testing",
+        "description": "Write a top-secret message using lemon juice. Reveal it using heat and see if it summons a spy."
+    },
+    {
+        "name": "Undercover Unicorn",
+        "description": "Disguise the dog as a unicorn and see if anyone in the neighborhood notices."
+    },
+    {
+        "name": "Pirate Treasure Hunt",
+        "description": "Create a treasure map leading to the 'lost treasure' hidden somewhere in the living room."
+    },
+    {
+        "name": "Garden Gnome Liberation",
+        "description": "Relocate garden gnomes to new, exciting spots in the garden for a change of scenery."
     }
 ]
+    

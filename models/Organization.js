@@ -50,14 +50,21 @@ const OrganizationSchema = new mongoose.Schema({
     }
 });
 
-OrganizationSchema.statics.getAllOrganizationsWithManagers = async function(currentUserId) {
+OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(currentUserId, isMember) {
     const userId = mongoose.Types.ObjectId(currentUserId);
+
+    let matchCondition = {};
+    if (isMember) {
+        // User is a member of the organization
+        matchCondition = { members: userId };
+    } else {
+        // User is not a member of the organization
+        matchCondition = { members: { $ne: userId }, private: false};
+    }
 
     return this.aggregate([
         {
-            $match: {
-                members: userId // filters to include only organizations where the current user is a member
-            }
+            $match: matchCondition
         },
         {
             $lookup: {
@@ -86,16 +93,56 @@ OrganizationSchema.statics.getAllOrganizationsWithManagers = async function(curr
     ]);
 };
 
-OrganizationSchema.statics.findOpenOrganizations = async function(currentUserId) {
-    const user_id = mongoose.Types.ObjectId(currentUserId);
+OrganizationSchema.statics.getOrganizationWithDetails = async function(organizationID) {
+    const orgID = mongoose.Types.ObjectId(organizationID);
 
-    return this.find({
-        members: { $nin: [user_id] },
-        private: false
-    });
+    return this.aggregate([
+        {
+            $match: {
+                _id: orgID // filters to include only the targeted organization
+            }
+        },
+        {
+            $lookup: {
+                from: 'users', // Assuming 'users' is the name of your User collection
+                localField: 'manager', // Field in Organization schema
+                foreignField: '_id', // Field in User schema
+                as: 'managerDetails' // Array containing the joined documents
+            }
+        },
+        {
+            $unwind: {
+                path: '$managerDetails',
+                preserveNullAndEmptyArrays: true // Keeps organizations without a manager
+            }
+        },
+        {
+            $lookup: {
+                from: 'users', // For the founder
+                localField: 'founder', // Adjusted for the founder
+                foreignField: '_id',
+                as: 'founderDetails' // Array for founder details
+            }
+        },
+        {
+            $unwind: {
+                path: '$founderDetails',
+                preserveNullAndEmptyArrays: true // Keeps organizations without a founder
+            }
+        },
+        {
+            $project: {
+                name: 1, // Keeps the organization name
+                description: 1, // Keeps the organization description
+                members: 1, // Keeps the organization members
+                managerName: '$managerDetails.name', // Extracts the manager's name
+                founderName: '$founderDetails.name', // Extracts the founder's name
+                private: 1, // Keeps the privacy status
+                dateCreated: 1 // Keeps the date the organization was created
+            }
+        }
+    ]);    
 };
-
-
 
 async function joinOrganization(organizationId, memberObjectId) {
     try {

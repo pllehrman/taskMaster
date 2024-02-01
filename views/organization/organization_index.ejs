@@ -2,20 +2,18 @@
 <div class='org-header-wrapper'>
     <h2 class='organization-header'>Organization Dashboard</h2>
 </div>
-<main>
-    <div class="organization-container">
-        <% organizations.forEach(function(organization) { %>
-            <a href="/organization/<%= organization.id %>" class="organization-box">
-                <div class="organization-name">
-                    <%= organization.name %>
-                </div>
-                <div class="organization-details">
-                    <p>Manager: <%= organization.managerName %></p>
-                    <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                </div>
-            </a>
-        <% }); %>
-    </div>
-</main>
+<div class="organization-container">
+    <% organizations.forEach(function(organization) { %>
+        <a href="/organizations/<%= organization._id %>" class="organization-box">
+            <div class="organization-name">
+                <%= organization.name %>
+            </div>
+            <div class="organization-index-details">
+                <p>Manager: <%= organization.managerName %></p>
+                <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+            </div>
+        </a>
+    <% }); %>
+</div>
 <a href="/organizations/join" class='join-button'>+</a>
 

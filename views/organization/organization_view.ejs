@@ -1,0 +1,17 @@
+<div class ="org-header-wrapper">
+    <h2 class="organization-header"><%= organization.name %></h2>
+</div>
+<div class = "page-container">
+    <div class="organization-details">
+        <div class="details">
+            <h3>Description:</h3>
+            <p><%= organization.description %></p>
+            <p class="privacy-status">Privacy Status: <%= organization.private ? 'Private' : 'Public' %></p>
+            <p>Total Members: <%= organization.members.length %></p>
+            <p>Manager: <%= organization.managerName %></p>
+            <p>Founder: <%= organization.founderName %></p>
+            <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+        </div>
+    </div>
+</div>
+

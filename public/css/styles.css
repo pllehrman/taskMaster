@@ -166,25 +166,7 @@ section {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* SIDEBAR */
-
-
-.organization-list {
-    list-style-type: none; /* Remove default list styling */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
-}
-
-.organization-list li {
-    margin-bottom: 10px; /* Space between items */
-    font-family: Arial, sans-serif;
-    color: white;
-    cursor: pointer; /* Change cursor on hover */
-}
-
-.organization-list li:hover {
-    color: #5f5fc8; /* Highlight color on hover */
-}
+/* ORGANIZATIONS */
 
 .content {
     margin-left: 250px; /* Same as sidebar width */
@@ -228,9 +210,78 @@ section {
     font-size: larger;
 }
 
-.organization-details {
-    text-align: left;
+.organization-index-details {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
+
+.side-by-side-container {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping as a test */
+    gap: 60px;
+    padding: 20px;
+    max-width: 880px;
+    margin: auto;
+}
+
+.side-by-side-section {
+    background-color: #f2f2f2; /* Light grey background */
+    border: 2px solid green; /* Green border */
+    border-radius: 15px; /* Rounded corners */
+    padding: 40px; /* Padding inside the sections */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Center text */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.section-link {
+    text-decoration: none;
+    color: black; /* Set the text color */
+    display: flex;
+    width: 100%; /* Ensure the link fills its container */
+}
+
+.section-link:hover .side-by-side-section{
+    background-color: #e8e8e8; /* Change background color on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    transform: scale(1.05); /* Slight scale effect */
+    border-color: darkgreen; /* Darker green border on hover */
+}
+
+/* Overall layout styling for Organization View*/
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* Adjust the space between the two sections */
+    padding: 20px;
+}
+
+.organization-details {
+    flex: 1; /* Allows the details section to grow but stay off-center */
+    max-width: 20%; /* Adjust based on your preference */
+    background-color: #f9f9f9; /* Light background for the details section */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    margin-right: auto; /* Pushes the section slightly off the left */
+}
+
+
+.details p {
+    color: #666; /* Lighter text for paragraph */
+    line-height: 1.6; /* Improved readability */
+    margin-bottom: 8px; /* Space between paragraphs */
+}
+/* Example class for the tasks section */
+.tasks-section {
+    flex: 2; /* Takes more space than the details section */
+    /* Additional styling for tasks section */
+}
+
 
 /* FORM */
 
@@ -316,6 +367,8 @@ button:hover {
 
 /* Specific class for blue button */
 .blue-bubble-button {
+    font: inherit;
+    justify-content: center;
     background-color: blue; /* Blue background */
     color: white; /* Text color for normal state */
 }
@@ -342,4 +395,41 @@ button:hover {
 
 .join-button:hover {
     background-color: darkgreen; /* Slightly darker color on hover */
+}
+
+
+/* MODAL STYLES */
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

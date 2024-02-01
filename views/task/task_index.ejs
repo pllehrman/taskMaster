@@ -1,19 +1,45 @@
-<body>
-    <header>
-        <h1>Tasks</h1>
-    </header>
-    <main>
-        <div class="task-container">
-            <a href="/task/new" class="add-button">Add Task</a>
-            <ul class="task-list">
-                <% tasks.forEach(function(task) { %>
-                    <li class="task-item">
-                        <h2 class="task-title"><%= task.name %></h2>
-                        <p class="task-description"><%= task.description %></p>
-                    </li>
-                <% }); %>
-            </ul>
-        </div>
-    </main>
-</body>
+<div>
+    <h1>All Tasks</h1>
+</div>
+
+<a href="/task/new" class="add-button">Add Task</a>
+
+<div class="task-container">
+    <h2>Tasks I'm Assigner Of</h2>
+    <ul class="task-list">
+        <% tasks.asAssigner.forEach(function(task) { %>
+            <li class="task-item">
+                <h3 class="task-title"><%= task.name %></h3>
+                <p class="task-description"><%= task.description %></p>
+            </li>
+        <% }); %>
+    </ul>
+</div>
+
+<div class="task-container">
+    <h2>Tasks Assigned To Me</h2>
+    <ul class="task-list">
+        <% tasks.asAssignee.forEach(function(task) { %>
+            <li class="task-item">
+                <h3 class="task-title"><%= task.name %></h3>
+                <p class="task-description"><%= task.description %></p>
+            </li>
+        <% }); %>
+    </ul>
+</div>
+
+<div class="task-container">
+    <h2>Tasks I'm Owner Of</h2>
+    <ul class="task-list">
+        <% tasks.asOwner.forEach(function(task) { %>
+            <li class="task-item">
+                <h3 class="task-title"><%= task.name %></h3>
+                <p class="task-description"><%= task.description %></p>
+            </li>
+        <% }); %>
+    </ul>
+</div>
+
+
+
 

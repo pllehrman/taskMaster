@@ -26,5 +26,26 @@
     {
         "name": "Future Leaders",
         "description": "Promoting sustainable practices"
+    },
+    {
+        "name": "Chuckle Factory",
+        "description": "Where laughter is the main product, and we take funny business seriously."
+    },
+    {
+        "name": "Pun-tastic Society",
+        "description": "We're here to pun-ish your sense of humor, one wordplay at a time."
+    },
+    {
+        "name": "Clown College Alumni",
+        "description": "Once you've graduated from Clown College, you're never truly serious again."
+    },
+    {
+        "name": "Sock Syndicate",
+        "description": "Our mission: promoting the joy of wearing mismatched, colorful socks."
+    },
+    {
+        "name": "Giggle Guild",
+        "description": "For those who believe that a good laugh can solve almost anything."
     }
+      
 ]

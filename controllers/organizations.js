@@ -6,7 +6,7 @@ const session = require('express-session');
 const getAllOrganizations = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id;
 
-    const organizations = await Organization.getAllOrganizationsWithManagers(user_id);
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true);
     res.status(200).render('organization/organization_index', { organizations });
 }) 
 
@@ -20,12 +20,16 @@ const joinOrganization = asyncWrapper(async (req,res) => {
     res.redirect('/organizations');
 })
 
+const renderJoinSelect = asyncWrapper(async (req, res) => {
+    res.status(200).render('organization/organization_join')
+})
+
 const renderJoinOrganization = asyncWrapper(async (req,res) => {
     const user_id = req.session.user_id;
 
-    const organizations = await Organization.findOpenOrganizations(user_id);
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, false);
     
-    res.status(200).render('organization/organization_join_index.ejs', {organizations});
+    res.status(200).render('organization/organization_join_index', {organizations});
 })
 
 const createOrganization = asyncWrapper( async (req,res) =>{
@@ -42,13 +46,16 @@ const renderOrganizationForm = asyncWrapper( async (req,res) => {
 })
 
 const getOrganization = asyncWrapper(async (req,res,next) =>{
-    const { id:organizationID } = req.params
-    const organization = await organization.findOne({ _id: organizationID});
+    const organizationID = req.params.id
+    const organizations = await Organization.getOrganizationWithDetails(organizationID);
+    const organization = organizations[0]
+    
+    
     if (!organization) {
         return next(createCustomError(`No Organizaiton with id: ${organizationID}`, 404))
     }
 
-    res.status(200).json({ organization })
+    res.status(200).render('organization/organization_view',{organization})
 })
 
 const updateOrganization = asyncWrapper(async (req,res) =>{
@@ -80,5 +87,7 @@ module.exports =  {
     renderOrganizationForm,
     createOrganization,
     joinOrganization,
-    renderJoinOrganization
+    renderJoinSelect,
+    renderJoinOrganization,
+    getOrganization
 }
