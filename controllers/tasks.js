@@ -6,8 +6,7 @@ const session = require('express-session');
 // This should get all tasks that apply to the user. 
 const getAllTasks = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id
-    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id)
-
+    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id);
     const tasks = {
         asAssigner: tasksData.filter(task => task.assigner._id.equals(user_id)),
         asAssignee: tasksData.filter(task => task.assignees.some(assignee => assignee._id.equals(user_id))),

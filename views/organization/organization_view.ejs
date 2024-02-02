@@ -1,8 +1,9 @@
-<div class ="org-header-wrapper">
-    <h2 class="organization-header"><%= organization.name %></h2>
+<div class ="dash-header-wrapper">
+    <h2 class="dashboard-header"><%= organization.name %></h2>
 </div>
-<div class = "page-container">
-    <div class="organization-details">
+<div class = "view-page-layout">
+    <div class ="organization-details-wrapper">
+    <div class="organization-details-section">
         <div class="details">
             <h3>Description:</h3>
             <p><%= organization.description %></p>
@@ -13,5 +14,88 @@
             <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
         </div>
     </div>
+    </div>
+    <div class = "tasks-section">
+        <div class="task-section">
+            <h2>Tasks I've Assigned:</h2>
+            <div class="task-header">
+                <div class="left-info">Organization:</div>
+                <div class="center-info">Task Name:</div>
+                <div class="right-info">Task Responsibility:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asAssigner.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div class="left-info">
+                            <h3 class="task-organization-name"><%= organization.name %></h3>
+                        </div>
+                        <div class="center-info">
+                            <h2 class="task-title"><%= task.name %></h2>
+                        </div>
+                        <div class = "right-info">
+                            <h3 class = "task-owner">Task Owner</h3>
+                        </div>
+                        <div class="task-details" style="display: none;">
+                            <p>Assignees: <%= task.assignees.map(a => a.name).join(", ") %></p> <!-- Adjust as needed -->
+                            <p>Deadline: <%= new Date(task.time_deadline).toLocaleDateString() %></p>
+                            <p>Description: <%= task.description %></p>
+                            <button onclick="markComplete('<%= task._id %>')">Mark as Complete</button>
+                        </div>
+                    </div>
+                    
+                <% }); %>
+            </ul>
+        </div>
+
+        <div class="task-section">
+            <h2>Tasks Assigned To Me:</h2>
+            <div class="task-header">
+                <div class="left-info">Organization:</div>
+                <div class="center-info">Task Name:</div>
+                <div class="right-info">Task Assigner:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asAssignee.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div class="left-info">
+                            <h3 class="task-organization-name"><%= organization.name %></h3>
+                        </div>
+                        <div class="center-info">
+                            <h2 class="task-title"><%= task.name %></h2>
+                        </div>
+                        <div class = "right-info">
+                            <h3 class="task-assinger"><%= task.assigner.name %></h3>
+                        </div>
+                    </div>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div class="task-section">
+            <h2>Tasks Responsibility:</h2>
+            <div class="task-header">
+                <div class="left-info">Organization:</div>
+                <div class="center-info">Task Name:</div>
+                <div class="right-info">Task Responsibility:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asOwner.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div class="left-info">
+                            <h3 class="task-organization-name"><%= organization.name %></h3>
+                        </div>
+                        <div class="center-info">
+                            <h2 class="task-title"><%= task.name %></h2>
+                        </div>
+                        <div class = "right-info">
+                            <h3 class="task-assinger"><%= task.assigner.name %></h3>
+                        </div>
+                    </div>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
 </div>
+<a href="/tasks" class='button-base bubble-button grey-bubble-button grey-bubble-button-left'>Task History</a>
+<script src="js/script.js"></script>
 

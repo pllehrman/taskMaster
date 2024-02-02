@@ -36,18 +36,19 @@ const seedOrganizations = async (usersArr) => {
     let organizations = []; // Array to store the created organizations
 
     for (const orgData of jsonOrganizations) {
-      randomUserIndex = Math.floor(Math.random() * usersArr.length);
+      const randomUserIndex = Math.floor(Math.random() * usersArr.length);
       const randomUser = usersArr[randomUserIndex];
       orgData.manager = randomUser._id;
       orgData.founder = randomUser._id;
 
-      let selectedIndices = new Set();
+      let selectedIndices = new Set([randomUserIndex]); // Initialize with manager/founder index
       while (selectedIndices.size < 5) {
         let randomIndex = Math.floor(Math.random() * usersArr.length);
         selectedIndices.add(randomIndex);
       }
+
       orgData.members = Array.from(selectedIndices).map(index => usersArr[index]._id);
-      console.log(orgData)
+
       const organization = new Organization(orgData);
       await organization.save();
       organizations.push(organization); // Add the organization to the array
@@ -62,39 +63,51 @@ const seedOrganizations = async (usersArr) => {
 
 const seedTasks = async (users, organizations) => {
   try {
-    for (const taskData of jsonTasks) {
-      // Randomly select users for assigner and assignees, ensuring they are different
-      let assignerIndex, assignee1Index, assignee2Index;
-      assignerIndex = Math.floor(Math.random() * users.length);
-      do {
-        assignee1Index = Math.floor(Math.random() * users.length);
-      } while (assignee1Index === assignerIndex);
+    await Task.deleteMany(); // Optional: Clear existing tasks if starting fresh
 
-      do {
-        assignee2Index = Math.floor(Math.random() * users.length);
-      } while (assignee2Index === assignerIndex || assignee2Index === assignee1Index);
+    for (const organization of organizations) {
+      for (const taskData of jsonTasks) {
+        // Filter users belonging to the current organization
+        const orgUsers = users.filter(user => 
+          organization.members.includes(user._id) || 
+          organization.manager.equals(user._id) || 
+          organization.founder.equals(user._id));
 
-      // Randomly select an organization
-      const organizationIndex = Math.floor(Math.random() * organizations.length);
+        // Ensure there are enough users for assigner and assignees
+        if (orgUsers.length >= 3) {
+          let assignerIndex, assignee1Index, assignee2Index;
+          assignerIndex = Math.floor(Math.random() * orgUsers.length);
 
-      // Create a new task with ObjectId casting
-      const newTaskData = {
-        ...taskData,
-        assigner: users[assignerIndex]._id,
-        assignees: [
-          users[assignee1Index]._id,
-          users[assignee2Index]._id
-        ],
-        organization: organizations[organizationIndex]._id
-      };
+          do {
+            assignee1Index = Math.floor(Math.random() * orgUsers.length);
+          } while (assignee1Index === assignerIndex);
 
-      const newTask = new Task(newTaskData);
-      await newTask.save();
+          do {
+            assignee2Index = Math.floor(Math.random() * orgUsers.length);
+          } while (assignee2Index === assignerIndex || assignee2Index === assignee1Index);
+
+          // Create a new task with ObjectId casting for the current organization
+          const newTaskData = {
+            ...taskData,
+            assigner: orgUsers[assignerIndex]._id,
+            assignees: [
+              orgUsers[assignee1Index]._id,
+              orgUsers[assignee2Index]._id
+            ],
+            organization: organization._id
+          };
+
+          const newTask = new Task(newTaskData);
+          await newTask.save();
+        } else {
+          console.warn(`Not enough users in organization ${organization.name} to create tasks.`);
+        }
+      }
     }
 
-    console.log('All tasks have been successfully created.');
+    console.log('All tasks have been successfully created for each organization.');
   } catch (err) {
-    console.error('Error creating a task:', err);
+    console.error('Error creating tasks:', err);
     process.exit(1);
   }
 };

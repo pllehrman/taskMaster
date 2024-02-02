@@ -67,19 +67,22 @@ h2 {
     color: #666;
 }
 
-.org-header-wrapper {
+.dash-header-wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
 }
 
-.organization-header {
-    background-color: green;
-    padding: 10px 20px;
+.dashboard-header {
+    font-size: 2.0em;
+    background-color:  rgb(13, 104, 13);
+    padding: 10px 10px;
     border-radius: 10px;
     color: white;
-    width: 28%;
-    margin: 20px;
-    text-align: center;
+    width: 30%;
+    margin: 0 auto;
 }
 
 
@@ -108,10 +111,6 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-}
-
-input[type="checkbox"] {
-    width: auto;
 }
 
 label {
@@ -223,9 +222,11 @@ section {
     padding: 20px;
     max-width: 880px;
     margin: auto;
+    margin-top: 40px;
 }
 
 .side-by-side-section {
+    font-size: 1.5em;
     background-color: #f2f2f2; /* Light grey background */
     border: 2px solid green; /* Green border */
     border-radius: 15px; /* Rounded corners */
@@ -304,101 +305,163 @@ footer {
 
 /* BUTTONS */
 
-button {
+/* Base Button Style */
+.button-base {
     background-color: #007bff;
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.submit-button {
-    background-color: #0056b3;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
     font: inherit;
+    transition: background-color 0.3s;
 }
 
-.submit-button:hover {
+/* Hover effect for all buttons */
+.button-base:hover {
     background-color: #0056b3;
 }
 
+/* Additional specific styles for submit button */
+.submit-button {
+    font-weight: bold;
+}
+
+/* Additional specific styles for add button */
 .add-button {
     display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
     margin-top: 10px;
 }
 
-/* Base class for shared properties */
+/* Bubble Button Base Style */
 .bubble-button {
-    padding: 10px 20px; /* Top & bottom padding, Left & right padding */
-    text-decoration: none; /* Remove underline from links */
-    border-radius: 25px; /* Rounded corners for the bubble effect */
-    border: none; /* No border */
-    cursor: pointer; /* Cursor changes to a pointer when hovered over */
-    transition: background-color 0.3s, transform 0.1s; /* Smooth transition for hover effects */
+    padding: 10px 20px; /* Adjusted padding */
+    border-radius: 25px; /* More rounded corners for a bubble effect */
+    text-decoration: none; /* Generally, you'd want to remove text decoration for button-like links */
+    transition: transform 0.1s; /* Keeping transform transition from your bubble-button class */
 }
 
-/* Specific class for green button */
+/* Green Bubble Button */
 .green-bubble-button {
-    background-color: green; /* Green background */
-    color: white; /* Text color for normal state */
+    background-color: rgb(13, 104, 13);
 }
 
 .green-bubble-button:hover,
 .green-bubble-button:active {
-    color: white; /* Text color on hover and active */
-    background-color: darkgreen; /* Background color on hover and active */
+    background-color: darkgreen;
 }
 
-/* Specific class for blue button */
+/* Blue Bubble Button */
 .blue-bubble-button {
-    font: inherit;
-    justify-content: center;
-    background-color: blue; /* Blue background */
-    color: white; /* Text color for normal state */
+    background-color: rgb(24, 24, 145);
 }
 
 .blue-bubble-button:hover,
 .blue-bubble-button:active {
-    color: white; /* Text color on hover and active */
-    background-color: darkblue; /* Background color on hover and active */
+    background-color: rgb(4, 4, 60);
 }
 
-.join-button {
+.grey-bubble-button {
+    background-color: rgb(90, 90, 94);
     position: fixed;
-    bottom: 60px;
-    right: 30px;
-    background-color: green; /* Color matching your header, or another color */
+    bottom: 80px;
+    font-size: 1.75em;
+}
+
+.grey-bubble-button-left {
+    left: 60px
+}
+
+.grey-bubble-button-right {
+    right: 60px
+}
+
+
+/* TASKS */
+
+
+.task-section {
+    text-align: center;
+    max-width: 95%;
+    padding: 5px;
+    border: 2px solid green;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: auto; /* Center horizontally */
+    margin-top: 1vh; 
+    margin-bottom: 20px;/* Center vertically on the page */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.task-section:first-of-type {
+    margin-top: 0vh;
+}
+
+.task-section:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
+}
+
+.add-button {
+    display: inline-block;
+    background-color: green;
     color: white;
-    border: none;
-    border-radius: 5px; /* Optional: for rounded corners */
-    font-size: 2.5em; /* Larger '+' symbol */
-    padding: 15px 20px;
-    cursor: pointer; /* Changes cursor to pointer on hover */
+    padding: 10px 20px;
+    border-radius: 5px;
     text-decoration: none;
+    margin: 20px auto; /* Center button */
+    text-align: center;
 }
 
-.join-button:hover {
-    background-color: darkgreen; /* Slightly darker color on hover */
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
 }
 
+.task-list {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+}
 
-/* MODAL STYLES */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff; /* Contrast with the container */
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
+}
+
+.task-item:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(.999);
+}
+
+.task-details {
+    padding: 10px;
+    border-top: 1px solid #ccc; /* Visual separation */
+    background-color: #f0f0f0; /* Slightly different background */
+}
+
+.left-info, .right-info{
+    flex-basis: 20%;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.center-info {
+    flex-grow: 1;
+    text-align: center;
+    padding: 0 10px
+}
+
+/* JS MODAL STYLES */
 
 .modal {
     display: none; 
@@ -432,4 +495,52 @@ button:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+
+/* Organization View */
+
+.view-page-layout {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px; /* Adds some padding around the content */
+    border: 1px solid #ccc; /* Optional: adds a border */
+}
+
+.organization-details-wrapper {
+    flex: 1; /* Takes up 2 fractions of the available space, making it larger */
+    border: 1px solid #ccc; /* Optional: adds a border */
+    border-radius: 8px; /* Optional: rounds the corners */
+    padding: 10px; /* Adds some padding inside the tasks section */
+}
+
+.organization-details-section {
+    flex: 1; /* Takes up 1 fraction of the available space */
+    margin-right: 40px; /* Adds some space between the sections */
+    border: 1px solid #ccc; /* Optional: adds a border */
+    border-radius: 8px; /* Optional: rounds the corners */
+    text-align: left;
+    padding: 10px;
+    height: 95%;
+    border: 2px solid green;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: auto;
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}  
+    
+    
+.organization-details-section:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
+}
+
+.tasks-section {
+    flex: 3.5; /* Takes up 2 fractions of the available space, making it larger */
+    overflow-y: auto; /* Enables vertical scrolling */
+    max-height: 600px; /* Adjust based on your needs */
+    border: 1px solid #ccc; /* Optional: adds a border */
+    border-radius: 8px; /* Optional: rounds the corners */
+    padding: 10px; /* Adds some padding inside the tasks section */
 }

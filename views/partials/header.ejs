@@ -11,6 +11,9 @@
         <% if (demo_id) { %>
             <a class="header-right-a" href="/organizations">Dashboard</a>
         <% } %>
+        <% if (demo_id) { %>
+            <a class="header-right-a" href="/organizations/join">Manage Organizations</a>
+        <% } %>
         <a class="header-right-a" href="/contact">Contact</a>
         <% if (demo_id) { %>
             <div class ="bubble-button blue-bubble-button">Welcome, <strong><%= name %></strong>!</div>

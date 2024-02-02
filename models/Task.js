@@ -92,16 +92,30 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (cur
           }
       },
       {
-          $unwind: {
-              path: '$assignerDetails',
-              preserveNullAndEmptyArrays: true
+        $lookup: {
+            from: 'organizations',
+            localField: 'organization',
+            foreignField: '_id',
+            as: 'organizationDetails'
+        }
+      },
+      {
+        $unwind: {
+            path: '$assignerDetails',
+            preserveNullAndEmptyArrays: true
           }
       },
       {
-          $unwind: {
-              path: '$ownerDetails',
-              preserveNullAndEmptyArrays: true
+        $unwind: {
+            path: '$ownerDetails',
+            preserveNullAndEmptyArrays: true
           }
+      },
+      {
+        $unwind: {
+            path: '$organizationDetails',
+            preserveNullAndEmptyArrays: true
+        }
       },
       // Removed $unwind for assigneeDetails
       {
@@ -111,7 +125,7 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (cur
               assigner: '$assignerDetails',
               assignees: '$assigneeDetails', // Now keeps all assignee details as an array
               owner: '$ownerDetails',
-              organization: 1,
+              organization: '$organizationDetails',
               time_assigned: 1,
               time_deadline: 1,
               completed: 1
@@ -119,71 +133,69 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (cur
       }
     ])};
             
-TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (currentUserId, organizationId) {
-  organizationId = mongoose.Types.ObjectId(organizationId);
-  currentUserId = mongoose.Types.ObjectId(currentUserId);
-
-  const matchCondition = { 
-      organization: organizationId, 
-      $or: [
-      { assigner: currentUserId },
-      { assignees: currentUserId },
-      { ownership: currentUserId }
-  ] };
-  
-  return this.aggregate([
-    { $match: matchCondition },
-    {
-        $lookup: {
-            from: 'users', 
-            localField: 'assigner',
-            foreignField: '_id',
-            as: 'assignerDetails'
-        }
-    },
-    {
-        $lookup: {
-            from: 'users',
-            localField: 'assignees',
-            foreignField: '_id',
-            as: 'assigneeDetails'
-        }
-    },
-    {
-        $lookup: {
-            from: 'users',
-            localField: 'ownership',
-            foreignField: '_id',
-            as: 'ownerDetails'
-        }
-    },
-    {
-        $unwind: {
-            path: '$assignerDetails',
-            preserveNullAndEmptyArrays: true
-        }
-    },
-    {
-        $unwind: {
-            path: '$ownerDetails',
-            preserveNullAndEmptyArrays: true
-        }
-    },
-    {
-        $project: {
-            name: 1,
-            description: 1,
-            assigner: '$assignerDetails',
-            assignees: '$assigneeDetails', // Now keeps all assignee details
-            owner: '$ownerDetails',
-            organization: 1,
-            time_assigned: 1,
-            time_deadline: 1,
-            completed: 1
-        }
-    }
-])};
-  
+TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (UserId, organizationId) {
+    const orgID = mongoose.Types.ObjectId(organizationId);
+    currentUserId = mongoose.Types.ObjectId(UserId);
+    
+    const matchCondition = { organization: orgID,
+        $or: [
+        { assigner: currentUserId },
+        { assignees: currentUserId },
+        { ownership: currentUserId }
+    ]};
+    
+    return this.aggregate([
+        { $match: matchCondition },
+        {
+            $lookup: {
+                from: 'users', 
+                localField: 'assigner',
+                foreignField: '_id',
+                as: 'assignerDetails'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'assignees',
+                foreignField: '_id',
+                as: 'assigneeDetails'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'ownership',
+                foreignField: '_id',
+                as: 'ownerDetails'
+            }
+        },
+        {
+          $unwind: {
+              path: '$assignerDetails',
+              preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+          $unwind: {
+              path: '$ownerDetails',
+              preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                name: 1,
+                description: 1,
+                assigner: '$assignerDetails',
+                assignees: '$assigneeDetails', // Now keeps all assignee details as an array
+                owner: '$ownerDetails',
+                organization: 1,
+                time_assigned: 1,
+                time_deadline: 1,
+                completed: 1
+            }
+        }]);
+};
       
 
 module.exports = mongoose.model('Task', TaskSchema)
