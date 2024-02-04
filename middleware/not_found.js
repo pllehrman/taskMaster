@@ -1,3 +1,3 @@
-const notFound = (req,res) => res.status(404).send('Resource does not exist.')
+const notFound = (req,res) => res.status(200).redirect('/signup');
 
 module.exports = notFound

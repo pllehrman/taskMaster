@@ -3,75 +3,15 @@
 </div>
 <div class="organization-container">
     <% organizations.forEach(function(organization) { %>
-        <a href="/organizations/<%= organization._id %>" class="organization-box">
+        <a href="/organizations/join/select/<%= organization._id %>" class="organization-box">
             <div class="organization-name">
                 <%= organization.name %>
             </div>
             <div class="organization-index-details">
                 <p>Manager: <%= organization.managerName %></p>
                 <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                <button class="grey-bubble-button" data-org-id="<% organization._id %>" data-org-name = "<% organization.name %>">Join</button>
+                <button class="button-base submit-button" data-org-id="<% organization._id %>" data-org-name = "<% organization.name %>">Learn More</button>
             </div>
         </a>
     <% }); %>
 </div>
-
-<!-- Modal HTML -->
-<div id="joinModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Are you sure you want to join<span id="orgName"></span>?</p>
-        <button id="confirmJoin">Yes</button>
-        <button id="cancelJoin">No</button>
-    </div>
-</div>
-
-<!-- JavaScript for Modal -->
-<script>
-    Array.from(document.getElementsByClassName('blue-bubble-button')).forEach(function(btn) {
-    btn.onclick = function(event) {
-        event.preventDefault();
-        organizationIdToJoin = btn.getAttribute('data-org-id');
-        const orgName = btn.getAttribute('data-org-name'); // Assuming you have this attribute
-        document.getElementById('orgName').textContent = orgName; // Set the organization name in the modal
-        modal.style.display = "block";
-    }
-    });
-
-    var modal = document.getElementById('joinModal');
-    var span = document.getElementsByClassName("close")[0];
-    var organizationIdToJoin;
-
-    Array.from(document.getElementsByClassName('blue-bubble-button')).forEach(function(btn) {
-        btn.onclick = function(event) {
-            event.preventDefault();
-            organizationIdToJoin = btn.getAttribute('data-org-id');
-            modal.style.display = "block";
-        }
-    });
-
-    span.onclick = function() { modal.style.display = "none"; }
-    window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; } }
-
-    document.getElementById('confirmJoin').addEventListener('click', function() {
-        fetch('/organizations/join', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ organizationId: organizationIdToJoin })
-        })
-        .then(response => {
-            if (!response.ok) { throw new Error('Network response was not ok'); }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Joining Success:', data);
-            modal.style.display = "none";
-            // Handle success
-        })
-        .catch(error => {
-            console.error('Joining Error:', error);
-            modal.style.display = "none";
-            // Handle errors
-        });
-    });
-</script>

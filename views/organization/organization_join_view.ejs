@@ -1,0 +1,47 @@
+<div class ="dash-header-wrapper">
+    <h2 class="dashboard-header"><%= organization.name %></h2>
+</div>
+<div class = "view-page-layout">
+    <div class ="organization-details-wrapper">
+    <div class="organization-details-section">
+        <div class="details">
+            <h3>Description:</h3>
+            <p><%= organization.description %></p>
+            <p><span class="p-bold">Privacy Status:  </span><%= organization.private ? 'Private' : 'Public' %></p>
+            <p><span class="p-bold">Total Members:  </span> <%= organization.memberNames ? organization.memberNames.length : '0' %></p>
+            <p><span class="p-bold">Manager:  </span> <%= organization.managerName %></p>
+            <p><span class="p-bold">Founder:  </span> <%= organization.founderName %></p>
+            <p><span class="p-bold">Date Founded:  </span> <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+        </div>
+    </div>
+    </div>
+    <div class = "tasks-section">
+        <div class="task-section">
+            <h2>Membership:</h2>
+            <ul class="member-list">
+                <% organization.memberNames.forEach(function(name) { %>
+                    <div class="task-item">
+                        <div class="center-info">
+                            <h2 class="task-title"><%= name %></h2>
+                        </div>
+                    </div>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+</div>
+<a href="/organizations/join/select" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Back to Browse</a>
+<button id="joinButton" class='button-base bubble-button grey-bubble-button fixed-button bottom-right' data-org-id='<%= organization._id %>'>Join!</button>
+<div id="joinModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Are you sure you want to join the <%= organization.name %> organization?</p>
+        <button class= "button-base submit-button" id="confirmJoin">Yes, Join</button>
+    </div>
+</div>
+<script src="/js/joinModal.js"></script>
+    
+
+
+
+

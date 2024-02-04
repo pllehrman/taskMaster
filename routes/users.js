@@ -9,7 +9,8 @@ const {
     exitUser} = require('../controllers/users');
 
 router.route('/signup').get(renderSignUp).post(createUser);
-router.route('/login').get(renderLogIn).post(validate);
+router.route('/login').get(validate);
+// router.route('/login').get(renderLogIn).post(validate);
 router.route('/logout').get(exitUser)
 
 module.exports = router;

@@ -1,26 +1,23 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var taskItems = document.querySelectorAll('.task-item');
+    var expandDetails = document.querySelectorAll('.expand-details');
 
-    taskItems.forEach(function(item) {
-        item.addEventListener('click', function() {
-            var details = this.querySelector('.task-details');
+    expandDetails.forEach(function(indicator) {
+        indicator.addEventListener('click', function(event) {
+            // Prevent event from bubbling up to avoid triggering any parent click handlers
+            event.stopPropagation();
+
+            // Find the closest parent .task-item of the clicked .expand-details span
+            var taskItem = this.closest('.task-item');
+
+            // Within the found .task-item, find the .task-details div to toggle
+            var details = taskItem.querySelector('.task-details');
+
+            // Toggle the display of the .task-details div
             details.style.display = details.style.display === 'none' ? 'block' : 'none';
         });
     });
 });
+// Toggle visibility class for the .task-details div
+details.classList.toggle('task-details-visible');
 
 
-function markComplete(taskId) {
-    fetch(`/mark-task-complete/${taskId}`, {
-        method: 'POST',
-        // Additional headers and body as needed
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Task marked as complete', data);
-        // Optionally, update the UI to reflect the change
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}

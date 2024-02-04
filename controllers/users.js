@@ -25,15 +25,18 @@ const renderSignUp = asyncWrapper(async (req, res, next) => {
 
 // user logging in
 const validate = asyncWrapper(async (req, res, next) => {
-    const demo_id = String(req.body.id);
+    const demo_id = 5705;
+    // const demo_id = String(req.body.id);
     if (!demo_id ) {
-        return next(createCustomError("Please provide a demo ID.", 400));
+        req.flash('error', 'Please provide a Demo ID.')
+        return res.redirect('/login');
     }
     
     const user = await User.findOne({ demo_id });
     
     if (!user) {
-        return next(createCustomError("Invalid email or password", 401));
+        req.flash('error', "We're sorry. We don't have a record of this demo ID. Please start a new demo session.")
+        return res.redirect('/signup');
     }
 
     // Establishing the session variables

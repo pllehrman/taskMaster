@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
 const path = require('path');
+const flash = require('connect-flash');
 const session = require('express-session');
 
 
@@ -42,12 +43,19 @@ app.use(session({
     cookie: { secure: false } // set to true if using https
   }));
 
+//Setting up flash globally
+app.use(flash());
+
 //Setting user as a global variable
 app.use((req, res, next) => {  
     if (req.session && req.session.demo_id) {
         const {name, demo_id}= req.session;
         res.locals.demo_id= demo_id;
         res.locals.name = name;
+
+        // Making flash messages
+        res.locals.flashMessages = req.flash()
+
     } else {
         res.locals.name = null;
         res.locals.demo_id = null;
@@ -58,7 +66,8 @@ app.use((req, res, next) => {
 
 //Public routes
 app.get('/', (req,res)=>{
-    res.status(200).render('about');
+    res.redirect('/login')
+    // res.status(200).render('about');
 })
 
 app.use('/', about_contact)

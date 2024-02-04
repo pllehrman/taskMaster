@@ -128,6 +128,11 @@ label {
     text-align: justify;
 }
 
+.p-bold {
+    color: #000;
+    font-weight: bolder;
+}
+
 
 /* SECTIONS */
 
@@ -174,6 +179,9 @@ section {
 }
 
 .organization-container {
+    border: 2px solid black;
+    overflow-y: auto;
+    max-height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -301,13 +309,16 @@ footer {
     height: 30px;
 }
 
-
-
 /* BUTTONS */
 
-/* Base Button Style */
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+    width: 100%; /* Ensures the container spans the full width of its parent */
+}
+
 .button-base {
-    background-color: #007bff;
+    background-color: #0056b3;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -317,9 +328,8 @@ footer {
     transition: background-color 0.3s;
 }
 
-/* Hover effect for all buttons */
 .button-base:hover {
-    background-color: #0056b3;
+    background-color: #014a97;
 }
 
 /* Additional specific styles for submit button */
@@ -327,10 +337,26 @@ footer {
     font-weight: bold;
 }
 
-/* Additional specific styles for add button */
-.add-button {
-    display: inline-block;
-    margin-top: 10px;
+.submit-button-red{
+    background-color: rgb(150, 10, 10);
+    font-weight: bold;
+}
+
+.submit-button-red:hover{
+    background-color:  rgb(129, 9, 9);
+}
+
+.profile-outline {
+    border: 2px solid green;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.profile-outline:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Bubble Button Base Style */
@@ -353,27 +379,45 @@ footer {
 
 /* Blue Bubble Button */
 .blue-bubble-button {
-    background-color: rgb(24, 24, 145);
+    background-color: #0056b3;
 }
 
 .blue-bubble-button:hover,
 .blue-bubble-button:active {
-    background-color: rgb(4, 4, 60);
+    background-color: #014a97;
 }
 
 .grey-bubble-button {
-    background-color: rgb(90, 90, 94);
-    position: fixed;
-    bottom: 80px;
-    font-size: 1.75em;
+    background-color: #333;
 }
 
-.grey-bubble-button-left {
+.grey-bubble-button:hover{
+    background-color: #282727;
+}
+
+.fixed-button {
+    position: fixed;
+    font-size: 1.5em;
+}
+
+.bottom-left {
+    bottom: 75px;
     left: 60px
 }
 
-.grey-bubble-button-right {
-    right: 60px
+.bottom-right {
+    right: 60px;
+    bottom: 75px;
+}
+
+.top-right {
+    right: 60px;
+    top: 75px;
+}
+
+.top-left {
+    left: 60px;
+    top: 75px;
 }
 
 
@@ -383,7 +427,8 @@ footer {
 .task-section {
     text-align: center;
     max-width: 95%;
-    padding: 5px;
+    height: 95%;
+    padding: 10px;
     border: 2px solid green;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -414,28 +459,26 @@ footer {
     text-align: center;
 }
 
-.task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 3px;
+.task-header, .task-item{
+    padding-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Adjust the number of columns as needed */
+    gap: 10px; /* Optional: Adds some space between the columns */
 }
+
+.task-item {
+    margin: 5px;
+    align-items: center;
+    background-color: #fff; /* Contrast with the container */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
+}
+
 
 .task-list {
     list-style: none; /* Remove bullet points */
     padding: 0;
-}
-
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #fff; /* Contrast with the container */
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ccc;
 }
 
 .task-item:hover {
@@ -497,6 +540,13 @@ footer {
     cursor: pointer;
 }
 
+.description-label {
+    font-weight: bolder;
+    margin-bottom: 10px;
+    color: #000; 
+    font-size: 1.3em;
+}
+
 
 /* Organization View */
 
@@ -539,8 +589,171 @@ footer {
 .tasks-section {
     flex: 3.5; /* Takes up 2 fractions of the available space, making it larger */
     overflow-y: auto; /* Enables vertical scrolling */
-    max-height: 600px; /* Adjust based on your needs */
+    max-height: 650px; /* Adjust based on your needs */
     border: 1px solid #ccc; /* Optional: adds a border */
     border-radius: 8px; /* Optional: rounds the corners */
     padding: 10px; /* Adds some padding inside the tasks section */
 }
+
+.expand-details {
+    margin-left: 5px;
+}
+
+/* Flash Messages */
+
+/* Base styling for all alerts */
+.alert {
+    text-align: center;
+    width: 30%;
+    margin: 20px auto; /* Center the alert on the page and add some margin */
+    padding: 15px;
+    border-radius: 5px; /* Rounded corners */
+    color: white; /* White text */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Slight shadow for depth */
+    position: relative;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  /* Hover effect for alerts */
+  .alert:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* More pronounced shadow on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+  }
+  
+  /* Success alert styling */
+  .alert-success {
+    background-color: #4CAF50; /* Green background */
+    border: 1px solid #46a049; /* Slightly darker green border */
+  }
+  
+  /* Error alert styling */
+  .alert-danger {
+    background-color: #f44336; /* Red background */
+    border: 1px solid #d32f2f; /* Slightly darker red border */
+  }
+  
+  /* MODAL STYLES */
+
+  .modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0; 
+    top: 0; 
+    width: 100%; /* Cover the full viewport width */
+    height: 100%; /* Cover the full viewport height */
+    background-color: rgba(0,0,0,0.4); /* Semi-transparent background */
+}
+
+.modal-content { 
+    text-align: center;
+    max-width: 600px; /* Match .centered-section width */
+    padding: 20px;
+    border: 2px solid green;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: 30vh auto; /* Center vertically and horizontally */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.modal-content:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content p {
+    font: inherit;
+}
+
+.modal-content div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.close { 
+    color: #aaa; 
+    float: right; 
+    font-size: 28px; 
+    font-weight: bold; 
+}
+
+.close:hover, .close:focus { 
+    color: black; 
+    text-decoration: none; 
+    cursor: pointer; 
+}
+
+
+/* GREEN CHECKBOX */
+
+/* Base Checkbox Styles */
+.custom-checkbox-label {
+    --checkbox-bg: #eee; /* Default background color */
+    --checkbox-checked-bg: #4CAF50; /* Default checked color, green */
+
+    position: relative;
+    padding-left: 30px;
+    padding-top: 35px;
+    cursor: pointer;
+    user-select: none;
+    line-height: 24px;
+    display: inline-block;
+}
+
+.custom-checkbox-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 35px;
+    height: 35px;
+    background-color: var(--checkbox-bg);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-checkbox-label::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: -5px;
+    width: 15px;
+    height: 30px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    display: none;
+}
+
+.task-done-checkbox {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.task-done-checkbox:checked + .custom-checkbox-label::before {
+    background-color: var(--checkbox-checked-bg);
+}
+
+.task-done-checkbox:checked + .custom-checkbox-label::after {
+    display: block;
+}
+
+/* Green Checkbox Modifier */
+.custom-checkbox-label-green {
+    --checkbox-checked-bg: #4CAF50; /* Green */
+}
+
+/* Blue Checkbox Modifier */
+.custom-checkbox-label-blue {
+    --checkbox-checked-bg: #0056b3; /* Blue */
+}
+
+.custom-checkbox-label-red {
+    --checkbox-checked-bg: rgb(150, 10, 10);
+}
+
+

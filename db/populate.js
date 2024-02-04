@@ -23,6 +23,7 @@ const seedUsers = async () => {
         await user.save();
         userDocs.push(user);
     }
+    console.log('Users have been successfully seeded.')
     return userDocs;
   } catch (err) {
     console.error(err);
@@ -35,38 +36,47 @@ const seedOrganizations = async (usersArr) => {
     await Organization.deleteMany();
     let organizations = []; // Array to store the created organizations
 
-    for (const orgData of jsonOrganizations) {
-      const randomUserIndex = Math.floor(Math.random() * usersArr.length);
-      const randomUser = usersArr[randomUserIndex];
-      orgData.manager = randomUser._id;
-      orgData.founder = randomUser._id;
+    // Split users array into two halves
+    const halfwayPoint = Math.ceil(usersArr.length / 2);
+    const firstHalfUsers = usersArr.slice(0, halfwayPoint);
+    const secondHalfUsers = usersArr.slice(halfwayPoint);
 
-      let selectedIndices = new Set([randomUserIndex]); // Initialize with manager/founder index
-      while (selectedIndices.size < 5) {
-        let randomIndex = Math.floor(Math.random() * usersArr.length);
-        selectedIndices.add(randomIndex);
-      }
+    // Assume jsonOrganizations is an array of organization data objects
+    for (let i = 0; i < jsonOrganizations.length; i++) {
+      const orgData = jsonOrganizations[i];
+      
+      // Determine which half of users should join this organization
+      const usersToJoin = i < 6 ? firstHalfUsers : secondHalfUsers;
 
-      orgData.members = Array.from(selectedIndices).map(index => usersArr[index]._id);
+      // Set the first user of the relevant half as manager and founder
+      orgData.manager = usersToJoin[0]._id;
+      orgData.founder = usersToJoin[0]._id;
+
+      // Add the first 5 users of the relevant half as members
+      // This ensures the manager/founder, who is also the first user, is included
+      orgData.members = usersToJoin.slice(0, 5).map(user => user._id);
 
       const organization = new Organization(orgData);
       await organization.save();
       organizations.push(organization); // Add the organization to the array
-    };
+    }
 
+    console.log('Organizations have been successfully created and users assigned.');
     return organizations; // Return the array of organizations
   } catch (err) {
-    console.error(err);
+    console.error('Error creating organizations:', err);
     process.exit(1);
   }
 };
+
 
 const seedTasks = async (users, organizations) => {
   try {
     await Task.deleteMany(); // Optional: Clear existing tasks if starting fresh
 
     for (const organization of organizations) {
-      for (const taskData of jsonTasks) {
+      const tasksSubset = jsonTasks.sort(() => 0.5 - Math.random()).slice(0, Math.ceil(jsonTasks.length / 2));
+      for (const taskData of tasksSubset) {
         // Filter users belonging to the current organization
         const orgUsers = users.filter(user => 
           organization.members.includes(user._id) || 

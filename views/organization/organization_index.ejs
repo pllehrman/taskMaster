@@ -2,6 +2,18 @@
 <div class='dash-header-wrapper'>
     <div class = 'center-info dashboard-center-info'><h2 class ="dashboard-header">Organization Dashboard</h2></div>
 </div>
+
+<% if (flashMessages.success) { %>
+    <div class="alert alert-success">
+        <%= flashMessages.success %>
+    </div>
+<% } %>
+<% if (flashMessages.error) { %>
+    <div class="alert alert-danger">
+        <%= flashMessages.error %>
+    </div>
+<% } %>
+
 <div class="organization-container">
     <% organizations.forEach(function(organization) { %>
         <a href="/organizations/<%= organization._id %>" class="organization-box">
@@ -15,6 +27,8 @@
         </a>
     <% }); %>
 </div>
+<a href="/tasks" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Live Tasks</a>
+<a href="/tasks/new" class='button-base bubble-button grey-bubble-button fixed-button bottom-right'>Task History</a>
 
 
 

@@ -1,16 +1,31 @@
-<section>
+<% if (flashMessages.success) { %>
+    <div class="alert alert-success">
+        <%= flashMessages.success %>
+    </div>
+<% } %>
+<% if (flashMessages.error) { %>
+    <div class="alert alert-danger">
+        <%= flashMessages.error %>
+    </div>
+<% } %>
+<div class="centered-section">
     <h1>Create New Organization</h1>
-    <form action="/organizations" method="post">
+    <form action="/organizations/new" method="post">
         <div>
             <label for="name">Organization Name:</label>
-            <input type="text" id="name" name="name" maxlength="20" required>
+            <input type="text" id="name" name="name" maxlength="100" required>
         </div>
 
         <div>
             <label for="description">Description:</label>
-            <textarea id="description" name="description" maxlength="100"></textarea>
+            <textarea id="description" name="description" maxlength="400" required></textarea>
         </div>
 
-        <button type="submit">Create Organization</button>
+        <div class="toggle-switch">
+            <label for="private">Is this a private organization?: </label>
+            <input type="checkbox" id="private" name="private" value="true">
+        </div>
+
+        <button type="submit" class="button-base submit-button">Create Organization</button>
     </form>
-</section>
+</div>

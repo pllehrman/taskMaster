@@ -13,19 +13,36 @@ const getAllOrganizations = asyncWrapper( async (req,res) => {
 }) 
 
 const joinOrganization = asyncWrapper(async (req,res) => {
-    const orgID = req.params; // this is the string corresponding to the organization id
+    const orgID = req.params.id; // this is the string corresponding to the organization id
     const user_id = req.session.user_id // this is the raw MongoDB ObjectID
 
-    console.log(orgID, user_id);
-    // const organization = await Organization.joinOrganization(orgID, user_id)
+    const organization = await Organization.joinOrganization(orgID, user_id)
+   
+    if (!organization) {
+        req.flash('error', 'Unable to join that organization.');
+        res.status(200).json({
+            success: false,
+            message: 'Unable to join an organization.',
+            redirectTo: '/organizations' // Specify where to redirect if needed
+        });
+        
+    }
+    req.flash('success', `You successfully joined the ${organization.name} organization.`);
+    res.status(200).json({
+        success: true,
+        message: 'Successfully joined the organization.',
+        redirectTo: '/organizations' // Specify where to redirect if needed
+    });
 
-    res.redirect('/organizations');
+    
+
 })
 
 const renderJoinSelect = asyncWrapper(async (req, res) => {
     res.status(200).render('organization/organization_join')
 })
 
+// When the user wants to browse the open organizations that they can join.
 const renderJoinOrganization = asyncWrapper(async (req,res) => {
     const user_id = req.session.user_id;
 
@@ -34,11 +51,33 @@ const renderJoinOrganization = asyncWrapper(async (req,res) => {
     res.status(200).render('organization/organization_join_index', {organizations});
 })
 
+// When the user wants to "learn more" about an organization on the join organizations page.
+const renderJoinSpecificOrganization = asyncWrapper(async (req,res) => {
+    const org_id = req.params.id
+
+    const organizations = await Organization.getOrganizationMembership(org_id)
+    const organization = organizations[0]
+
+    res.status(200).render('organization/organization_join_view', {organization})
+
+})
+
+// When the user wants to create their own organization.
 const createOrganization = asyncWrapper( async (req,res) =>{
-    const { name, description} = req.body
-    const founder = 'current_user.id'
-    const date_created = Date.now();
-    const organization = await Organization.create({name, description, date_created})
+    const { name, description, private} = req.body
+    const founder = req.session.user_id
+    const manager = req.session.user_id
+    const members = [req.session.user_id] 
+
+    const organization_check = await Organization.checkDuplicate(name)
+
+    if (organization_check) {
+        req.flash('error', 'Organization with this name alrady exists. Please try again with a new name.')
+        return res.redirect('/organizations/new');
+    }
+    
+    await Organization.create({name, description, members, founder, manager, private})
+    req.flash('success', 'Organizaiton created successfully.');
 
     res.redirect('/organizations');
 })
@@ -98,5 +137,6 @@ module.exports =  {
     joinOrganization,
     renderJoinSelect,
     renderJoinOrganization,
-    getOrganization
+    getOrganization,
+    renderJoinSpecificOrganization
 }

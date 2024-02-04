@@ -27,8 +27,7 @@ const TaskSchema = new mongoose.Schema({
 
     ownership: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
+        ref: 'User'
     },
 
     organization: {
@@ -36,7 +35,7 @@ const TaskSchema = new mongoose.Schema({
         ref: 'Organization'
     },
 
-    time_assinged: {
+    time_assigned: {
         type: Date, 
         default: Date.now
     },
@@ -53,16 +52,16 @@ const TaskSchema = new mongoose.Schema({
     
 })
 
-// Static method to get tasks categorized by user role
-TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (currentUserId) {
+// Static method to get tasks categorized by user role and whether the tasks been completed
+TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (userId, complete) {
 
-    currentUserId = mongoose.Types.ObjectId(currentUserId);
+    const currentUserId = mongoose.Types.ObjectId(userId);
 
-    matchCondition = {
+    matchCondition = { completed: complete,
                     $or: [
+                    { ownership: currentUserId },
                     { assigner: currentUserId },
-                    { assignees: currentUserId },
-                    { ownership: currentUserId }
+                    { assignees: currentUserId }
                 ]}
 
     return this.aggregate([
@@ -124,7 +123,7 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (cur
               description: 1,
               assigner: '$assignerDetails',
               assignees: '$assigneeDetails', // Now keeps all assignee details as an array
-              owner: '$ownerDetails',
+              ownership: '$ownerDetails',
               organization: '$organizationDetails',
               time_assigned: 1,
               time_deadline: 1,
@@ -132,10 +131,11 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (cur
           }
       }
     ])};
-            
-TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (UserId, organizationId) {
+
+// Method to find all tasks associated with the user and specific organization
+TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (userId, organizationId) {
     const orgID = mongoose.Types.ObjectId(organizationId);
-    currentUserId = mongoose.Types.ObjectId(UserId);
+    const currentUserId = mongoose.Types.ObjectId(userId);
     
     const matchCondition = { organization: orgID,
         $or: [
@@ -195,6 +195,63 @@ TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (UserId, or
                 completed: 1
             }
         }]);
+};
+
+// Method to mark tasks as complete
+TaskSchema.statics.markTaskAsDone = async function(taskId, userId) {
+    const currentTaskId = mongoose.Types.ObjectId(taskId);
+    const currentUserId = mongoose.Types.ObjectId(userId);
+    
+    try {
+        const task = await this.findOneAndUpdate(
+            { 
+                _id: currentTaskId, 
+                $or: [ 
+                    { assigner: currentUserId }, 
+                    { ownership: currentUserId } 
+                ] 
+            },
+            { $set: { completed: true } }, // Assuming 'completed' is a field indicating the task's completion status
+            { new: true } // Returns the updated document
+        );
+
+        if (!task) {
+            console.log("No matching task found, or user is not the assigner/owner.");
+            return null; // Indicates no task was updated
+        } else {
+            console.log("Task marked as completed.");
+            return task; // Returns the updated task document
+        }
+    } catch (error) {
+        console.error('Error marking task as done:', error);
+        throw error;
+    }
+};
+
+TaskSchema.statics.takeResponsibility = async function(taskId, userId) {
+    const currentTaskId = mongoose.Types.ObjectId(taskId);
+    const currentUserId = mongoose.Types.ObjectId(userId);
+    
+    try {
+        const task = await this.findOneAndUpdate(
+            { 
+                _id: currentTaskId, assignees: currentUserId 
+                 
+            },
+            { $set: { ownership: currentUserId } }, // Assuming 'completed' is a field indicating the task's completion status
+            { new: true } // Returns the updated document
+        );
+
+        if (!task) {
+            return null; // Indicates no task was updated
+        } else {
+            return task; // Returns the updated task document
+        }
+    } catch (error) {
+        console.error('Error marking task as done:', error);
+        throw error;
+    }
+
 };
       
 

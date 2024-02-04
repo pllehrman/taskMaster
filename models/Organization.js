@@ -10,14 +10,14 @@ const OrganizationSchema = new mongoose.Schema({
         type: String, 
         required: [true, 'must provide a name'],
         trim: true, 
-        maxlength: [20, 'name can not be more than 20 characters']
+        maxlength: [100, 'name can not be more than 20 characters']
     },
     
     description: {
         type:String, 
         required: [true, 'must provide some kind of description'],
         trim: true,
-        maxlength: [200, 'description must be snappy and short.']
+        maxlength: [500, 'description must be snappy and short.']
 
     },
     
@@ -50,6 +50,7 @@ const OrganizationSchema = new mongoose.Schema({
     }
 });
 
+// This returns all organizations either related to the user or not based on isMember argument.
 OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(currentUserId, isMember) {
     const userId = mongoose.Types.ObjectId(currentUserId);
 
@@ -93,6 +94,7 @@ OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(curre
     ]);
 };
 
+// This returns a specfic organization with advanced details on manager and founder.
 OrganizationSchema.statics.getOrganizationWithDetails = async function(organizationID) {
     const orgID = mongoose.Types.ObjectId(organizationID);
 
@@ -144,9 +146,75 @@ OrganizationSchema.statics.getOrganizationWithDetails = async function(organizat
     ]);    
 };
 
-async function joinOrganization(organizationId, memberObjectId) {
+// This returns an organization with the names of all the members in an array.
+OrganizationSchema.statics.getOrganizationMembership = async function(organizationID) {
+    const orgID = mongoose.Types.ObjectId(organizationID);
+
+    return this.aggregate([
+        {
+            $match: {
+                _id: orgID // filters to include only the targeted organization
+            }
+        },
+        {
+            $lookup: {
+                from: 'users', // Assuming 'users' is the name of your User collection
+                localField: 'manager', // Field in Organization schema
+                foreignField: '_id', // Field in User schema
+                as: 'managerDetails' // Array containing the joined documents
+            }
+        },
+        {
+            $unwind: {
+                path: '$managerDetails',
+                preserveNullAndEmptyArrays: true // Keeps organizations without a manager
+            }
+        },
+        {
+            $lookup: {
+                from: 'users', // For the founder
+                localField: 'founder', // Adjusted for the founder
+                foreignField: '_id',
+                as: 'founderDetails' // Array for founder details
+            }
+        },
+        {
+            $unwind: {
+                path: '$founderDetails',
+                preserveNullAndEmptyArrays: true // Keeps organizations without a founder
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'members',
+                foreignField: '_id',
+                as: 'memberDetails'
+            }
+        },
+        {
+            $project: {
+                name: 1, // Keeps the organization name
+                description: 1, // Keeps the organization description
+                memberNames: '$memberDetails.name', // Keeps the organization members
+                managerName: '$managerDetails.name', // Extracts the manager's name
+                founderName: '$founderDetails.name', // Extracts the founder's name
+                private: 1, // Keeps the privacy status
+                dateCreated: 1 // Keeps the date the organization was created
+            }
+        }
+    ]);   
+};
+
+// This checks to see if there already exists an organization with the name in the DB.
+OrganizationSchema.statics.checkDuplicate = async function(name) {
+    const count = await this.countDocuments({name});
+    return count > 0;
+};
+
+OrganizationSchema.statics.joinOrganization = async function(organizationId, memberObjectId) {
     try {
-        const result = await Organization.updateOne(
+        const result = await this.findOneAndUpdate(
             { _id: mongoose.Types.ObjectId(organizationId) },
             { $addToSet: { members: mongoose.Types.ObjectId(memberObjectId) } }
         );
@@ -161,7 +229,7 @@ async function joinOrganization(organizationId, memberObjectId) {
         console.error('Error adding member to the organization:', error);
         throw error;
     }
-}
+};
 
 
 

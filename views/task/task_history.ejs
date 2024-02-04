@@ -1,0 +1,67 @@
+<div class="dash-header-wrapper">
+    <h2 class="dashboard-header">Task History</h2>
+</div>
+<% if (flashMessages.success) { %>
+    <div class="alert alert-success">
+        <%= flashMessages.success %>
+    </div>
+<% }; %>
+<% if (flashMessages.error) { %>
+    <div class="alert alert-danger">
+        <%= flashMessages.error %>
+    </div>
+<% }; %>
+<div class="tasks-section">
+    <div class="task-section">
+        <div class="task-header">
+            <div>Organization:</div>
+            <div>Task Name:</div>
+            <div>Assigned By:</div>
+            <div>Date Assigned:</div>
+            <div>Due Date:</div>
+            <div>Learn More:</div>
+            <div>Mark Incomplete:</div>
+        </div>
+        <ul class="task-list">
+            <% tasks.forEach(function(task) { %>
+                <div class="task-item">
+                    <div>
+                        <p class="task-organization-name"><%= task.organization.name %></p>
+                    </div>
+                    <div>
+                        <h3 class="task-title"><%= task.name %></h3>
+                    </div>
+                    <div>
+                        <p class="task-owner"><%= task.assigner.name %></p>
+                    </div>
+                    <div>
+                        <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                    </div>
+                    <div>
+                        <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                    </div>
+                    <div>
+                        <button class="button-base submit-button inspect-button" data-task-id="<%= task._id %>" data-task-description="<%= task.description %>" data-is-assigner="false">Inspect</button>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="task-done-red-<%= task._id %>" class="task-done-checkbox" <%= !task.completed ? 'checked' : '' %> onclick="markIncomplete('<%= task._id %>')" />
+                        <label for="task-done-red-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-red"></label>
+                    </div>
+                </div>
+            <% }); %>
+        </ul>
+    </div>
+</div>
+<button id="refreshTasks" class="button-base bubble-button blue-bubble-button fixed-button top-right">Refresh Tasks</button>
+<a href="/tasks" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Back To Live Tasks</a>
+<div id="inspectModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="button-container">
+            <button class="button-base submit-button-red" id="deleteTaskButton" style="display: none;">Delete Task</button>
+        </div>
+    </div>
+</div>
+<script src="/js/inspectModal.js"></script>
+
+

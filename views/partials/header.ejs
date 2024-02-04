@@ -16,11 +16,11 @@
         <% } %>
         <a class="header-right-a" href="/contact">Contact</a>
         <% if (demo_id) { %>
-            <div class ="bubble-button blue-bubble-button">Welcome, <strong><%= name %></strong>!</div>
+            <div class ="profile-outline">Welcome, <strong><%= name %></strong>!</div>
             <a class="header-right-a" href="/logout">Logout</a>
         <% } %>
         <% if (!demo_id) { %>
-            <a class = "bubble-button green-bubble-button" href="/signup">Start Demo</a>
+            <a class = "button-base bubble-button green-bubble-button" href="/signup">Start Demo</a>
             <a class="header-right-a" href="/login"> Restart Demo</a>
         <% } %>
     </div>
