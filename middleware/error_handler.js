@@ -3,7 +3,8 @@ const { CustomAPIError } = require('../errors/custom_error');
 const errorHandlerMiddleware = (err, req, res, next) => {
     // Handle CustomAPIError
     if (err instanceof CustomAPIError) {
-        return res.status(err.statusCode).json({ msg: err.message });
+        console.log(`Status code ${err.statusCode}`, `Message: ${err.message}`);
+        return res.status(404).render('not_found');
     }
 
     // Provide more information in development mode
@@ -18,7 +19,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     console.error(err);
 
     // Send response
-    return res.status(500).json(errorDetails);
+    return res.status(404).render('not_found');
 }
 
 module.exports = errorHandlerMiddleware;

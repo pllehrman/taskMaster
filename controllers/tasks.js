@@ -3,13 +3,21 @@ const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom_error')
 const session = require('express-session');
 
-// This should get all tasks that apply to the user and have yet to be completed.
+// This should get all tasks that apply to the user and have yet to be completed. It also takes a sort parameter.
 const getAllTasks = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id
-    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id, false);
+    console.log('hit controller.')
+    let sortOption = req.query.sort || 'time_assigned'; // Default sorting
+    let sortOrder = {};
+    sortOrder[sortOption] = 1; 
+
+    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id, false, sortOrder);
     const tasks = {
         asAssigner: tasksData.filter(task => task.assigner._id.equals(user_id)),
-        asAssignee: tasksData.filter(task => task.assignees.some(assignee => assignee._id.equals(user_id))),
+        asAssignee: tasksData.filter(task => 
+            task.assignees.some(assignee => assignee._id.equals(user_id)) && 
+            (!task.ownership || !task.ownership._id) // Ensure no owner is established
+        ),
         asOwner: tasksData.filter(task => task.ownership && task.ownership._id.equals(user_id))
     };
     res.status(200).render('task/task_index', {tasks});
@@ -89,6 +97,26 @@ const markAsDone = asyncWrapper(async (req,res) =>{
 
 });
 
+const markAsIncomplete = asyncWrapper(async (req,res) => {
+    const user_id = req.session.user_id
+    const task_id = req.params.id
+
+    const task = await Task.markTaskIncomplete(task_id, user_id);
+    if (!task) {
+        req.flash('error', 'Unable to mark task.');
+        res.status(200).json({
+            success: false,
+            message: 'Unable to mark task.'
+        });
+    }
+    req.flash('success', 'Task(s) marked as incomplete.');
+    res.status(200).json({
+        success: true,
+        message: 'Task marked incomplete.'
+    });
+
+})
+
 const takeResponsibility = asyncWrapper(async (req,res) => {
     const task_id = req.params.id
     const user_id = req.session.user_id
@@ -124,6 +152,7 @@ module.exports = {
     getAllTasksByOrg,
     deleteTask,
     markAsDone,
+    markAsIncomplete,
     takeResponsibility,
     renderHistory
 }

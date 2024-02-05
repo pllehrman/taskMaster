@@ -75,7 +75,7 @@ const seedTasks = async (users, organizations) => {
     await Task.deleteMany(); // Optional: Clear existing tasks if starting fresh
 
     for (const organization of organizations) {
-      const tasksSubset = jsonTasks.sort(() => 0.5 - Math.random()).slice(0, Math.ceil(jsonTasks.length / 2));
+      const tasksSubset = jsonTasks.sort(() => 0.5 - Math.random()).slice(0, Math.ceil(jsonTasks.length / 4));
       for (const taskData of tasksSubset) {
         // Filter users belonging to the current organization
         const orgUsers = users.filter(user => 
@@ -96,6 +96,10 @@ const seedTasks = async (users, organizations) => {
             assignee2Index = Math.floor(Math.random() * orgUsers.length);
           } while (assignee2Index === assignerIndex || assignee2Index === assignee1Index);
 
+          // Generate dynamic dates for time_assigned and time_deadline
+          const assignedDate = new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000); // 0-30 days before today
+          const deadlineDate = new Date(assignedDate.getTime() + Math.floor(Math.random() * 15 + 1) * 24 * 60 * 60 * 1000); // 1-15 days after assignedDate
+
           // Create a new task with ObjectId casting for the current organization
           const newTaskData = {
             ...taskData,
@@ -104,7 +108,9 @@ const seedTasks = async (users, organizations) => {
               orgUsers[assignee1Index]._id,
               orgUsers[assignee2Index]._id
             ],
-            organization: organization._id
+            organization: organization._id,
+            time_assigned: assignedDate,
+            time_deadline: deadlineDate
           };
 
           const newTask = new Task(newTaskData);
@@ -121,6 +127,7 @@ const seedTasks = async (users, organizations) => {
     process.exit(1);
   }
 };
+
 
 
 const startSeeding = async () => {

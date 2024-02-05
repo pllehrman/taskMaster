@@ -15,6 +15,7 @@ const users = require('./routes/users')
 const connectDB = require('./db/connect')
 
 //Middleware folder imports 
+const validateId = require('./middleware/paramValidate');
 const notFound = require('./middleware/not_found')
 const errorHandlerMiddleware = require('./middleware/error_handler')
 const expressLayouts = require('express-ejs-layouts');
@@ -48,13 +49,11 @@ app.use(flash());
 
 //Setting user as a global variable
 app.use((req, res, next) => {  
+    res.locals.flashMessages = req.flash()
     if (req.session && req.session.demo_id) {
         const {name, demo_id}= req.session;
         res.locals.demo_id= demo_id;
         res.locals.name = name;
-
-        // Making flash messages
-        res.locals.flashMessages = req.flash()
 
     } else {
         res.locals.name = null;
@@ -64,10 +63,10 @@ app.use((req, res, next) => {
     next();
 });
 
+
 //Public routes
 app.get('/', (req,res)=>{
-    res.redirect('/login')
-    // res.status(200).render('about');
+    res.status(200).render('about');
 })
 
 app.use('/', about_contact)
@@ -77,8 +76,8 @@ app.use('/', users)
 app.use(authenticationMiddleware)
 
 //Protected Routes
-app.use('/tasks', tasks)
-app.use('/organizations', organizations)
+app.use('/tasks',validateId, tasks);
+app.use('/organizations', validateId, organizations);
 
 //Error handling middlware
 app.use(notFound)

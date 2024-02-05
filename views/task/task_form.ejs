@@ -1,6 +1,23 @@
-<section>
+<% if (flashMessages.success) { %>
+    <div class="alert alert-success">
+        <%= flashMessages.success %>
+    </div>
+<% } %>
+<% if (flashMessages.error) { %>
+    <div class="alert alert-danger">
+        <%= flashMessages.error %>
+    </div>
+<% } %>
+
+<div class="centered-section">
     <h1>Create New Task</h1>
     <form action="/task" method="post">
+        <div>
+            <label>Organization:</label>
+            <p>Organization Name</p>
+            <input type="hidden" name="organization_id" value="OrgID">
+        </div>
+
         <div>
             <label for="name">Task Name:</label>
             <input type="text" id="name" name="name" maxlength="20" required>
@@ -12,10 +29,26 @@
         </div>
 
         <div>
+            <label for="users">Assign to:</label>
+            <select id="users" name="users[]" multiple required>
+                <option value="user1ID">User 1</option>
+                <option value="user2ID">User 2</option>
+                <!-- Populate dynamically -->
+            </select>
+        </div>
+
+        <div>
+            <label for="deadline">Deadline:</label>
+            <input type="date" id="deadline" name="deadline" required>
+        </div>
+
+        <div>
             <label for="completed">Completed:</label>
             <input type="checkbox" id="completed" name="completed">
         </div>
 
-        <button type="submit">Create Task</button>
+
+        <button class="button-base submit-button">Create Task</button>
     </form>
-</section>
+</div>
+

@@ -1,156 +1,189 @@
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
 <div class ="dash-header-wrapper">
     <h2 class="dashboard-header"><%= organization.name %></h2>
 </div>
+<% if (flashMessages.success) { %>
+    <div class="alert alert-success">
+        <%= flashMessages.success %>
+    </div>
+<% } %>
+<% if (flashMessages.error) { %>
+    <div class="alert alert-danger">
+        <%= flashMessages.error %>
+    </div>
+<% } %>
 <div class = "view-page-layout">
     <div class ="organization-details-wrapper">
-    <div class="organization-details-section">
-        <div class="details">
-            <h3>Description:</h3>
-            <p><%= organization.description %></p>
-            <p><span class="p-bold">Privacy Status:  </span><%= organization.private ? 'Private' : 'Public' %></p>
-            <p><span class="p-bold">Total Members:  </span> <%= organization.members.length ? organization.members.length : '0' %></p>
-            <p><span class="p-bold">Manager:  </span> <%= organization.managerName %></p>
-            <p><span class="p-bold">Founder:  </span> <%= organization.founderName %></p>
-            <p><span class="p-bold">Date Founded:  </span> <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+        <div class="organization-details-section">
+            <div class="details">
+                <h3>Description:</h3>
+                <p><%= organization.description %></p>
+                <p><span class="p-bold">Privacy Status:  </span><%= organization.private ? 'Private' : 'Public' %></p>
+                <p><span class="p-bold">Total Members:  </span> <%= organization.members.length ? organization.members.length : '0' %></p>
+                <p><span class="p-bold">Manager:  </span> <%= organization.managerName %></p>
+                <p><span class="p-bold">Founder:  </span> <%= organization.founderName %></p>
+                <p><span class="p-bold">Date Founded:  </span> <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+            </div>
         </div>
-    </div>
     </div>
     <div class="tasks-section">
-    <div class="task-section">
-        <h2>Tasks I've Assigned:</h2>
-        <div class="task-header">
-            <div>Organization:</div>
-            <div>Task Name:</div>
-            <div>Task Responsibility:</div>
-            <div>Date Assigned:</div>
-            <div>Due Date:</div>
-            <div>Learn More:</div>
-            <div>Mark Complete:</div>
+        <div class="task-section">
+            <h2>Tasks I've Assigned:</h2>
+            <div class="task-header">
+                <div>Organization:</div>
+                <div>Task Name:</div>
+                <div>Task Responsibility:</div>
+                <div>Date Assigned:</div>
+                <div>Due Date:</div>
+                <div>Learn More:</div>
+                <div>Mark Complete:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asAssigner.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div>
+                            <p class="task-organization-name"><%= task.organization.name %></p>
+                        </div>
+                        <div>
+                            <h3 class="task-title"><%= task.name %></h3>
+                        </div>
+                        <div>
+                            <% if (task.owner) { %>
+                                <p class="task-owner"><%= task.owner.name %></p>
+                            <% } %>
+                            <% if (!task.owner) { %>
+                                <p class="task-owner">None Yet</p>
+                            <% } %>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <button class="button-base submit-button inspect-button" data-task-id="<%= task._id %>" data-task-description="<%= task.description %>" data-is-assigner="true">Inspect</button>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="task-done-green-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="markComplete('<%= task._id %>')" />
+                            <label for="task-done-green-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-green"></label> 
+                        </div>
+                    </div>
+                <% }); %>
+            </ul>
         </div>
-        <ul class="task-list">
-            <% tasks.asAssigner.forEach(function(task) { %>
-                <div class="task-item">
-                    <div>
-                        <p class="task-organization-name"><%= task.organization.name %></p>
+    
+        <div class="task-section">
+            <h2>Tasks Assigned To Me:</h2>
+            <div class="task-header">
+                <div>Organization:</div>
+                <div>Task Name:</div>
+                <div>Task Assigner:</div>
+                <div>Date Assigned:</div>
+                <div>Due Date:</div>
+                <div>Learn More:</div>
+                <div>Take Responsibility:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asAssignee.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div>
+                            <p class="task-organization-name"><%= task.organization.name %></p>
+                        </div>
+                        <div>
+                            <h3 class="task-title"><%= task.name %></h3>
+                        </div>
+                        <div>
+                            <% if (task.assigner) { %>
+                                <p class="task-owner"><%= task.assigner.name %></p>
+                            <% } %>
+                            <% if (!task.assigner) { %>
+                                <p class="task-owner">None</p>
+                            <% } %>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <button class="button-base submit-button inspect-button" data-task-id="<%= task._id %>" data-task-description="<%= task.description %>" data-is-assigner="false">Inspect</button>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="task-done-blue-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="takeResponsibility('<%= task._id %>')" />
+                            <label for="task-done-blue-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-blue"></label>                   
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="task-title"><%= task.name %></h3>
-                    </div>
-                    <div>
-                        <% if (task.owner) { %>
-                            <p class="task-owner"><%= task.owner.name %></p>
-                        <% } %>
-                        <% if (!task.owner) { %>
-                            <p class="task-owner">None Yet</p>
-                        <% } %>
-                    </div>
-                    <div>
-                        <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <button class="button-base submit-button inspect-button" data-task-description="<%= task.description %>" data-is-assigner="true">Inspect</button>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="task-done-green-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="markComplete('<%= task._id %>')" />
-                        <label for="task-done-green-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-green"></label> 
-                    </div>
-                </div>
-            <% }); %>
-        </ul>
-    </div>
-
-    <div class="task-section">
-        <h2>Tasks Assigned To Me:</h2>
-        <div class="task-header">
-            <div>Organization:</div>
-            <div>Task Name:</div>
-            <div>Task Assigner:</div>
-            <div>Date Assigned:</div>
-            <div>Due Date:</div>
-            <div>Learn More:</div>
-            <div>Take Responsibility:</div>
+                <% }); %>
+            </ul>
         </div>
-        <ul class="task-list">
-            <% tasks.asAssignee.forEach(function(task) { %>
-                <div class="task-item">
-                    <div>
-                        <p class="task-organization-name"><%= task.organization.name %></p>
-                    </div>
-                    <div>
-                        <h3 class="task-title"><%= task.name %></h3>
-                    </div>
-                    <div>
-                        <% if (task.assigner) { %>
+    
+        <div class="task-section">
+            <h2>My Responsibilities:</h2>
+            <div class="task-header">
+                <div>Organization:</div>
+                <div>Task Name:</div>
+                <div>Task Assigner:</div>
+                <div>Date Assigned:</div>
+                <div>Due Date:</div>
+                <div>Learn More:</div>
+                <div>Mark Complete:</div>
+            </div>
+            <ul class="task-list">
+                <% tasks.asOwner.forEach(function(task) { %>
+                    <div class="task-item">
+                        <div>
+                            <p class="task-organization-name"><%= task.organization.name %></p>
+                        </div>
+                        <div>
+                            <h3 class="task-title"><%= task.name %></h3>
+                        </div>
+                        <div>
                             <p class="task-owner"><%= task.assigner.name %></p>
-                        <% } %>
-                        <% if (!task.assigner) { %>
-                            <p class="task-owner">None</p>
-                        <% } %>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <button class="button-base submit-button inspect-button" data-task-id="<%= task._id %>" data-task-description="<%= task.description %>" data-is-assigner="false">Inspect</button>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="task-done-green-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="markComplete('<%= task._id %>')" />
+                            <label for="task-done-green-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-green"></label>
+                        </div>
                     </div>
-                    <div>
-                        <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <button class="button-base submit-button inspect-button" data-task-description="<%= task.description %>" data-is-assigner="false">Inspect</button>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="task-done-blue-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="takeResponsibility('<%= task._id %>')" />
-                        <label for="task-done-blue-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-blue"></label>                   
-                    </div>
-                </div>
-            <% }); %>
-        </ul>
-    </div>
-
-    <div class="task-section">
-        <h2>My Responsibilities:</h2>
-        <div class="task-header">
-            <div>Organization:</div>
-            <div>Task Name:</div>
-            <div>Task Assigner:</div>
-            <div>Date Assigned:</div>
-            <div>Due Date:</div>
-            <div>Learn More:</div>
-            <div>Mark Complete:</div>
+                <% }); %>
+            </ul>
         </div>
-        <ul class="task-list">
-            <% tasks.asOwner.forEach(function(task) { %>
-                <div class="task-item">
-                    <div>
-                        <p class="task-organization-name"><%= task.organization.name %></p>
-                    </div>
-                    <div>
-                        <h3 class="task-title"><%= task.name %></h3>
-                    </div>
-                    <div>
-                        <p class="task-owner"><%= task.assigner.name %></p>
-                    </div>
-                    <div>
-                        <p><%= new Date(task.time_assigned).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <p><%= new Date(task.time_deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
-                    </div>
-                    <div>
-                        <button class="button-base submit-button inspect-button" data-task-description="<%= task.description %>" data-is-assigner="false">Inspect</button>
-                    </div>
-                    <div>
-                        <input type="checkbox" id="task-done-green-<%= task._id %>" class="task-done-checkbox" <%= task.completed ? 'checked' : '' %> onclick="markComplete('<%= task._id %>')" />
-                        <label for="task-done-green-<%= task._id %>" class="custom-checkbox-label custom-checkbox-label-green"></label>
-                    </div>
-                </div>
-            <% }); %>
-        </ul>
     </div>
 </div>
+<button id="infoButton" class="base-icon info-button"><i class="fa-solid fa-circle-info"></i></button>
+<button id="refreshTasks" class="base-icon refresh-button"><i class="fa-solid fa-arrows-rotate"></i></button>
+<a href="/organizations" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Back to Dashboard</a>
+<a href="/tasks/new" class='button-base bubble-button grey-bubble-button fixed-button bottom-right'>Assign a Task!</a>
+<div id="inspectModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <!-- Placeholder for dynamic content, such as task description -->
+        <!-- This will be directly before the action buttons (if any) -->
+        
+        <!-- Optional: Delete Task Button, initially hidden -->
+        <div class="button-container">
+            <button class="button-base submit-button-red" id="deleteTaskButton" style="display: none;">Delete Task</button>
+        </div>
+        
+        <!-- Other buttons/actions can go here, e.g., a "Close" button or additional actions related to the task -->
+    </div>
 </div>
-<a href="/tasks/history" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Task History</a>
-<a href="/tasks/new" class='button-base bubble-button grey-bubble-button fixed-button bottom-right'>Assign a Task</a>
-<script src="js/script.js"></script>
+
+
+<script src="/js/checkBox.js"></script>
+<script src="/js/inspectModal.js"></script>
+<script src="/js/deleteTask.js"></script>
 

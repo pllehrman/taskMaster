@@ -53,102 +53,24 @@ const TaskSchema = new mongoose.Schema({
 })
 
 // Static method to get tasks categorized by user role and whether the tasks been completed
-TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function (userId, complete) {
-
+TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function(userId, complete, sortOption = { time_assigned: 1 }) {
     const currentUserId = mongoose.Types.ObjectId(userId);
 
-    matchCondition = { completed: complete,
-                    $or: [
-                    { ownership: currentUserId },
-                    { assigner: currentUserId },
-                    { assignees: currentUserId }
-                ]}
-
-    return this.aggregate([
-      { $match: matchCondition },
-      {
-          $lookup: {
-              from: 'users', 
-              localField: 'assigner',
-              foreignField: '_id',
-              as: 'assignerDetails'
-          }
-      },
-      {
-          $lookup: {
-              from: 'users',
-              localField: 'assignees',
-              foreignField: '_id',
-              as: 'assigneeDetails'
-          }
-      },
-      {
-          $lookup: {
-              from: 'users',
-              localField: 'ownership',
-              foreignField: '_id',
-              as: 'ownerDetails'
-          }
-      },
-      {
-        $lookup: {
-            from: 'organizations',
-            localField: 'organization',
-            foreignField: '_id',
-            as: 'organizationDetails'
-        }
-      },
-      {
-        $unwind: {
-            path: '$assignerDetails',
-            preserveNullAndEmptyArrays: true
-          }
-      },
-      {
-        $unwind: {
-            path: '$ownerDetails',
-            preserveNullAndEmptyArrays: true
-          }
-      },
-      {
-        $unwind: {
-            path: '$organizationDetails',
-            preserveNullAndEmptyArrays: true
-        }
-      },
-      // Removed $unwind for assigneeDetails
-      {
-          $project: {
-              name: 1,
-              description: 1,
-              assigner: '$assignerDetails',
-              assignees: '$assigneeDetails', // Now keeps all assignee details as an array
-              ownership: '$ownerDetails',
-              organization: '$organizationDetails',
-              time_assigned: 1,
-              time_deadline: 1,
-              completed: 1
-          }
-      }
-    ])};
-
-// Method to find all tasks associated with the user and specific organization
-TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (userId, organizationId) {
-    const orgID = mongoose.Types.ObjectId(organizationId);
-    const currentUserId = mongoose.Types.ObjectId(userId);
-    
-    const matchCondition = { organization: orgID,
+    const matchCondition = {
+        completed: complete,
         $or: [
-        { assigner: currentUserId },
-        { assignees: currentUserId },
-        { ownership: currentUserId }
-    ]};
-    
-    return this.aggregate([
+            { ownership: currentUserId },
+            { assigner: currentUserId },
+            { assignees: currentUserId }
+        ]
+    };
+
+    // Build the aggregation pipeline
+    const pipeline = [
         { $match: matchCondition },
         {
             $lookup: {
-                from: 'users', 
+                from: 'users',
                 localField: 'assigner',
                 foreignField: '_id',
                 as: 'assignerDetails'
@@ -171,30 +93,34 @@ TaskSchema.statics.findTasksByOrganizationWithUserDetails = function (userId, or
             }
         },
         {
-          $unwind: {
-              path: '$assignerDetails',
-              preserveNullAndEmptyArrays: true
+            $lookup: {
+                from: 'organizations',
+                localField: 'organization',
+                foreignField: '_id',
+                as: 'organizationDetails'
             }
         },
-        {
-          $unwind: {
-              path: '$ownerDetails',
-              preserveNullAndEmptyArrays: true
-            }
-        },
+        { $unwind: { path: '$assignerDetails', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$ownerDetails', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$organizationDetails', preserveNullAndEmptyArrays: true } },
+        // Optionally keep or remove the $unwind for assigneeDetails based on your needs
         {
             $project: {
                 name: 1,
                 description: 1,
                 assigner: '$assignerDetails',
-                assignees: '$assigneeDetails', // Now keeps all assignee details as an array
-                owner: '$ownerDetails',
-                organization: 1,
+                assignees: '$assigneeDetails', // Keeps all assignee details as an array
+                ownership: '$ownerDetails',
+                organization: '$organizationDetails',
                 time_assigned: 1,
                 time_deadline: 1,
                 completed: 1
             }
-        }]);
+        },
+        { $sort: sortOption } // Dynamically apply sorting based on the sortOption parameter
+    ];
+
+    return this.aggregate(pipeline);
 };
 
 // Method to mark tasks as complete
@@ -220,6 +146,37 @@ TaskSchema.statics.markTaskAsDone = async function(taskId, userId) {
             return null; // Indicates no task was updated
         } else {
             console.log("Task marked as completed.");
+            return task; // Returns the updated task document
+        }
+    } catch (error) {
+        console.error('Error marking task as done:', error);
+        throw error;
+    }
+};
+
+// Method to mark tasks as complete
+TaskSchema.statics.markTaskIncomplete = async function(taskId, userId) {
+    const currentTaskId = mongoose.Types.ObjectId(taskId);
+    const currentUserId = mongoose.Types.ObjectId(userId);
+    
+    try {
+        const task = await this.findOneAndUpdate(
+            { 
+                _id: currentTaskId, 
+                $or: [ 
+                    { assigner: currentUserId }, 
+                    { ownership: currentUserId } 
+                ] 
+            },
+            { $set: { completed: false} }, // Assuming 'completed' is a field indicating the task's completion status
+            { new: true } // Returns the updated document
+        );
+
+        if (!task) {
+            console.log("No matching task found, or user is not the assigner/owner.");
+            return null; // Indicates no task was updated
+        } else {
+            console.log("Task marked as incomplete .");
             return task; // Returns the updated task document
         }
     } catch (error) {

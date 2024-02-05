@@ -77,7 +77,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
     }
     
     await Organization.create({name, description, members, founder, manager, private})
-    req.flash('success', 'Organizaiton created successfully.');
+    req.flash('success', 'Organization created successfully.');
 
     res.redirect('/organizations');
 })
@@ -92,15 +92,19 @@ const getOrganization = asyncWrapper(async (req,res,next) =>{
     const organization = organizations[0]
 
     const user_id = req.session.user_id
-    const tasksData = await Task.findTasksByOrganizationWithUserDetails(user_id, organizationID);
+    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id, false);
     const tasks = {
         asAssigner: tasksData.filter(task => task.assigner._id.equals(user_id)),
-        asAssignee: tasksData.filter(task => task.assignees.some(assignee => assignee._id.equals(user_id))),
+        asAssignee: tasksData.filter(task => 
+            task.assignees.some(assignee => assignee._id.equals(user_id)) && 
+            (!task.ownership || !task.ownership._id) // Ensure no owner is established
+        ),
         asOwner: tasksData.filter(task => task.ownership && task.ownership._id.equals(user_id))
     };
     
     if (!organization) {
-        return next(createCustomError(`No Organizaiton with id: ${organizationID}`, 404))
+        console.log('Error: get request for this organization not found.')
+        res.status(404).render('not_found');
     }
 
     res.status(200).render('organization/organization_view',{organization, tasks})

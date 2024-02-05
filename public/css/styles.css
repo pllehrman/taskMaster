@@ -89,23 +89,22 @@ h2 {
 
 /* MAIN CONTENT */
 
-body {
+html, body {
     font-family: Bitter;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-height: 98.25vh;
+    min-height: 98.5vh;
+    overflow-y: hidden;
 }
 
-main {
-    flex-grow: 1;
-}
 
 input[type="text"],
 
 textarea {
+    font-family: Bitter;
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
@@ -179,7 +178,6 @@ section {
 }
 
 .organization-container {
-    border: 2px solid black;
     overflow-y: auto;
     max-height: 600px;
     display: flex;
@@ -270,8 +268,8 @@ section {
 }
 
 .organization-details {
-    flex: 1; /* Allows the details section to grow but stay off-center */
-    max-width: 20%; /* Adjust based on your preference */
+    flex: 2; /* Allows the details section to grow but stay off-center */
+    max-width: 40%; /* Adjust based on your preference */
     background-color: #f9f9f9; /* Light background for the details section */
     padding: 20px;
     border-radius: 10px; /* Rounded corners */
@@ -284,11 +282,6 @@ section {
     color: #666; /* Lighter text for paragraph */
     line-height: 1.6; /* Improved readability */
     margin-bottom: 8px; /* Space between paragraphs */
-}
-/* Example class for the tasks section */
-.tasks-section {
-    flex: 2; /* Takes more space than the details section */
-    /* Additional styling for tasks section */
 }
 
 
@@ -307,6 +300,11 @@ footer {
     color: white;
     text-align: center;
     height: 30px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding-bottom: 15px;
+    width: 100%;
 }
 
 /* BUTTONS */
@@ -344,6 +342,10 @@ footer {
 
 .submit-button-red:hover{
     background-color:  rgb(129, 9, 9);
+}
+
+.inspect-button {
+    margin-top: 5px;
 }
 
 .profile-outline {
@@ -427,7 +429,6 @@ footer {
 .task-section {
     text-align: center;
     max-width: 95%;
-    height: 95%;
     padding: 10px;
     border: 2px solid green;
     border-radius: 10px;
@@ -435,7 +436,7 @@ footer {
     background-color: #f9f9f9;
     margin: auto; /* Center horizontally */
     margin-top: 1vh; 
-    margin-bottom: 20px;/* Center vertically on the page */
+    margin-bottom: 15px;/* Center vertically on the page */
     transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
@@ -468,7 +469,6 @@ footer {
 
 .task-item {
     margin: 5px;
-    align-items: center;
     background-color: #fff; /* Contrast with the container */
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -481,7 +481,7 @@ footer {
     padding: 0;
 }
 
-.task-item:hover {
+.task-item:hover, .member-item:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     transform: scale(.999);
 }
@@ -500,9 +500,21 @@ footer {
 
 .center-info {
     flex-grow: 1;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
     padding: 0 10px
 }
+
+.member-item {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    background-color: #fff; /* Contrast with the container */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
+}
+
 
 /* JS MODAL STYLES */
 
@@ -554,12 +566,10 @@ footer {
     display: flex;
     justify-content: space-between;
     padding: 10px; /* Adds some padding around the content */
-    border: 1px solid #ccc; /* Optional: adds a border */
 }
 
 .organization-details-wrapper {
     flex: 1; /* Takes up 2 fractions of the available space, making it larger */
-    border: 1px solid #ccc; /* Optional: adds a border */
     border-radius: 8px; /* Optional: rounds the corners */
     padding: 10px; /* Adds some padding inside the tasks section */
 }
@@ -567,11 +577,10 @@ footer {
 .organization-details-section {
     flex: 1; /* Takes up 1 fraction of the available space */
     margin-right: 40px; /* Adds some space between the sections */
-    border: 1px solid #ccc; /* Optional: adds a border */
     border-radius: 8px; /* Optional: rounds the corners */
     text-align: left;
-    padding: 10px;
-    height: 95%;
+    padding: 8px;
+    height: 93%;
     border: 2px solid green;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -587,10 +596,10 @@ footer {
 }
 
 .tasks-section {
-    flex: 3.5; /* Takes up 2 fractions of the available space, making it larger */
-    overflow-y: auto; /* Enables vertical scrolling */
+    flex: 3; 
+    overflow-y: auto;
     max-height: 650px; /* Adjust based on your needs */
-    border: 1px solid #ccc; /* Optional: adds a border */
+    min-height: 0;
     border-radius: 8px; /* Optional: rounds the corners */
     padding: 10px; /* Adds some padding inside the tasks section */
 }
@@ -707,7 +716,7 @@ footer {
     content: '';
     position: absolute;
     left: 0;
-    top: 0;
+    top: 7px;
     width: 35px;
     height: 35px;
     background-color: var(--checkbox-bg);
@@ -719,7 +728,7 @@ footer {
     content: '';
     position: absolute;
     left: 10px;
-    top: -5px;
+    top: 0px;
     width: 15px;
     height: 30px;
     border: solid white;
@@ -729,6 +738,7 @@ footer {
 }
 
 .task-done-checkbox {
+    margin-top: 5px;
     opacity: 0;
     position: absolute;
     z-index: -1;
@@ -755,5 +765,131 @@ footer {
 .custom-checkbox-label-red {
     --checkbox-checked-bg: rgb(150, 10, 10);
 }
+
+
+/* TASK SORT */
+
+.sort-section {
+    position: fixed;
+    top: 74px;
+    left: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.sort-section option {
+    font: Bitter;
+}
+
+.sort-section label {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+#sortTasks {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#sortTasks:hover,
+#sortTasks:focus {
+    border-color: #888;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Other Button Styles */
+
+.base-icon {
+    position: fixed;
+    background-color: transparent; /* Makes the button background clear */
+    border: none; /* Removes the border */
+    color: #0056b3; /* Icon color */
+    font-size: 40px; /* Icon size */
+    cursor: pointer; /* Changes cursor to pointer when hovering over the button */
+}
+
+.refresh-button {
+    top: 80px;
+    right: 80px;
+}
+
+.info-button {
+    top: 80px;
+    left: 60px;
+    color: #333
+
+}
+
+/* Optionally: Style the button on hover/focus to give feedback to the user */
+.refresh-button:hover {
+    color: #003875; /* Darker shade of blue */
+}
+
+.info-button:hover {
+    color: #282727;
+}
+
+
+/* TASK FORM */
+
+select#users {
+    width: 100%; /* Full-width */
+    padding: 8px; /* Some padding */
+    margin-top: 5px; /* Space from the label */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded borders */
+    background-color: white; /* White background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    font-size: 16px; /* Slightly larger font size for readability */
+    cursor: pointer; /* Change cursor to indicate it's selectable */
+}
+
+/* Style for options - note: styling <option> directly is very limited in most browsers */
+select#users option {
+    padding: 10px; /* Make each option more tactile */
+}
+
+input#deadline {
+    width: 100%; /* Full-width */
+    padding: 8px; /* Comfortable padding */
+    margin-top: 5px; /* Space from the label */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded borders for modern look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-size: 16px; /* Readable text size */
+    background-color: white; /* White background */
+    cursor: pointer; /* Cursor change to indicate interactiveness */
+}
+
+/* Specific browsers use different UI for date pickers, 
+   so customization options are limited without JavaScript-based solutions */
+
+   select#users:focus, input#deadline:focus {
+    border-color: #4A90E2; /* Highlight color when element is focused */
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5); /* Custom focus glow */
+}
+
+select#users:hover, input#deadline:hover {
+    border-color: #aaa; /* Slightly darker border on hover */
+}
+
 
 

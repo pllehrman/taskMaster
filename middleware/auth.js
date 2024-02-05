@@ -14,7 +14,8 @@ const authenticationMiddleware = async (req, res, next) => {
     }
   } else {
     // If the session does not exist or does not have a user ID, throw an unauthenticated error
-    next(new UnauthenticatedError('User is not authenticated'));
+    req.flash('error', 'Please signup to use the demo!')
+    res.status(200).redirect('/signup')
   }
 };
 
