@@ -38,12 +38,11 @@ app.use(expressLayouts);
 
 //Establishing session middleware
 app.use(session({
-    secret: 'aa;ej;eif', // replace with a real secret key
+    secret: process.env.SESSION_SECRET, // Use environment variable for the secret
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // set to true if using https
-  }));
-
+    cookie: { secure: process.env.NODE_ENV === "production" } // Use secure cookies in production
+}));
 //Setting up flash globally
 app.use(flash());
 
@@ -83,16 +82,18 @@ app.use(errorHandlerMiddleware)
 // Establishing the port
 const port = process.env.PORT || 3000
 
-// Starting server
-const start = async () => {
+const start = async (retryCount = 5) => {
     try {
-        await connectDB(process.env.MONGO_URI)
-        app.listen(port, console.log(`Server is listening on port ${port}...`))
+        await connectDB(process.env.MONGO_URI);
+        app.listen(port, () => console.log(`Server is listening on port ${port}...`));
+    } catch (error) {
+        console.log(error);
+        if (retryCount > 0) {
+            console.log(`Retrying to connect to database... Attempts left: ${retryCount}`);
+            setTimeout(() => start(retryCount - 1), 5000); // Retry after 5 seconds
+        }
     }
-    catch (error) {
-        console.log(error)
-    }
-}
+};
 
 start()
 
