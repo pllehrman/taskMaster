@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
-
+const MongoStore = require('connect-mongo');
 
 //importing routes
 const tasks = require('./routes/tasks')
@@ -36,13 +36,20 @@ app.use(express.static(path.join(__dirname, 'public'))); //serving up the static
 //Layouts
 app.use(expressLayouts);
 
-//Establishing session middleware
+
+// Session middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET, // Use environment variable for the secret
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === "production" } // Use secure cookies in production
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
+
 //Setting up flash globally
 app.use(flash());
 
