@@ -71,6 +71,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
     const founder = req.session.user_id
     const manager = req.session.user_id
     const members = [req.session.user_id] 
+    const fake = false
 
     const organization_check = await Organization.checkDuplicate(name)
 
@@ -79,7 +80,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
         return res.redirect('/organizations/new');
     }
     
-    await Organization.create({name, description, members, founder, manager, private})
+    await Organization.create({name, description, members, founder, manager, private, fake})
     req.flash('success', 'Organization created successfully.');
 
     res.redirect('/organizations');

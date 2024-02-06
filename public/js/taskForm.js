@@ -3,6 +3,15 @@ document.addEventListener('DOMContentLoaded', function() {
     organizationSelect.id = 'organization';
     organizationSelect.name = 'organization';
     organizationSelect.required = true;
+    
+    // Add a default option prompting user selection
+    var defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Select An Organization';
+    defaultOption.value = '';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    organizationSelect.appendChild(defaultOption);
+
     document.getElementById('organization-container').appendChild(organizationSelect);
 
     // Load organizations on page load
@@ -23,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Listen for changes on the organization select and load users for the selected organization
     organizationSelect.addEventListener('change', function() {
         var organizationId = this.value;
+        
+        // Ensure a valid organization is selected before attempting to fetch users
+        if (!organizationId) return; // Skip fetching if the default option is selected
 
         fetch(`/organizations/users/${organizationId}`)
         .then(response => response.json())
@@ -32,22 +44,22 @@ document.addEventListener('DOMContentLoaded', function() {
             usersContainer.innerHTML = '';
             
             if (data.success && data.organization) {
-                const orgObjects = data.organization; // Accessing members from the organization object
+                const orgObjects = data.organization; // Assuming this is an array of member objects
     
-                // Iterate over the members array to populate options
+                // Iterate over the members array to populate checkboxes
                 orgObjects.forEach(element => {
                     const checkboxContainer = document.createElement('div');
                     checkboxContainer.classList.add('checkbox-container');
             
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
-                    checkbox.id = element.member._id;
+                    checkbox.id = element.member._id; // Assuming element has a member object with _id
                     checkbox.name = 'users[]';
-                    checkbox.value = element.member._id;
+                    checkbox.value = element.member._id; // Assuming element has a member object with _id
                     
                     const label = document.createElement('label');
-                    label.htmlFor = element.member._id;
-                    label.textContent = element.member.name;
+                    label.htmlFor = element.member._id; // Ensure this ID matches the checkbox's ID
+                    label.textContent = element.member.name; // Assuming element has a member object with name
                     
                     checkboxContainer.appendChild(checkbox);
                     checkboxContainer.appendChild(label);
