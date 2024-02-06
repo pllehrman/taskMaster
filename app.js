@@ -26,6 +26,15 @@ const expressLayouts = require('express-ejs-layouts');
 const authenticationMiddleware = require('./middleware/auth');
 require('dotenv').config()
 
+app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === 'production') {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+      next();
+    }
+  });
+  
+
 // Setting EJS as the view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
