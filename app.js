@@ -5,6 +5,10 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
+// HTTPS
+const https = require('https');
+const fs = require('fs');
+
 //importing routes
 const tasks = require('./routes/tasks')
 const organizations = require('./routes/organizations')
@@ -36,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //serving up the static
 //Layouts
 app.use(expressLayouts);
 
-
+app.set('trust proxy', 1);
 // Session middleware
 app.use(session({
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
@@ -92,9 +96,23 @@ const port = process.env.PORT || 3000
 const start = async (retryCount = 5) => {
     try {
         await connectDB(process.env.MONGO_URI);
-        app.listen(port, () => console.log(`Server is listening on port ${port}...`));
+
+        // Check if running in development mode
+        if (process.env.NODE_ENV === 'development') {
+            // Load SSL certificate files for HTTPS
+            const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+            const certificate = fs.readFileSync(path.join(__dirname, 'server.cert'), 'utf8');
+            const credentials = { key: privateKey, cert: certificate };
+
+            // Create HTTPS server for local development
+            const httpsServer = https.createServer(credentials, app);
+            httpsServer.listen(port, () => console.log(`HTTPS Server running on port ${port}...`));
+        } else {
+            // Fallback to regular HTTP server for production
+            app.listen(port, () => console.log(`Server is listening on port ${port}...`));
+        }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (retryCount > 0) {
             console.log(`Retrying to connect to database... Attempts left: ${retryCount}`);
             setTimeout(() => start(retryCount - 1), 5000); // Retry after 5 seconds
@@ -102,5 +120,5 @@ const start = async (retryCount = 5) => {
     }
 };
 
-start()
+start();
 
