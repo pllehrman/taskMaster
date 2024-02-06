@@ -7,8 +7,9 @@ const { USE_PROXY } = require('http-status-codes');
 
 const getAllOrganizations = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id;
+    const demo_id = req.session.demo_id
 
-    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true);
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true, demo_id);
     console.log(organizations);
     
     res.status(200).render('organization/organization_index', { organizations });
@@ -47,8 +48,9 @@ const renderJoinSelect = asyncWrapper(async (req, res) => {
 // When the user wants to browse the open organizations that they can join.
 const renderJoinOrganization = asyncWrapper(async (req,res) => {
     const user_id = req.session.user_id;
+    const demo_id = req.session.demo_id
 
-    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, false);
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, false, demo_id);
     
     res.status(200).render('organization/organization_join_index', {organizations});
 })
@@ -72,6 +74,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
     const manager = req.session.user_id
     const members = [req.session.user_id] 
     const fake = false
+    const demo_id = req.session.demo_id
 
     const organization_check = await Organization.checkDuplicate(name)
 
@@ -80,7 +83,7 @@ const createOrganization = asyncWrapper( async (req,res) =>{
         return res.redirect('/organizations/new');
     }
     
-    await Organization.create({name, description, members, founder, manager, private, fake})
+    await Organization.create({name, description, members, founder, manager, private, fake, demo_id})
     req.flash('success', 'Organization created successfully.');
 
     res.redirect('/organizations');
@@ -116,8 +119,9 @@ const getOrganization = asyncWrapper(async (req,res,next) =>{
 
 const organizationsAPI = asyncWrapper(async (req,res) => {
     const user_id = req.session.user_id;
+    const demo_id = req.session.demo_id
 
-    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true);
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true, demo_id);
     if (!organizations) {
         res.status(200).json({
             success: false,
@@ -134,8 +138,9 @@ const organizationsAPI = asyncWrapper(async (req,res) => {
 
 const organizationUsersAPI = asyncWrapper(async (req,res) => {
     organizationID = req.params.id;
+    const demo_id = req.session.demo_id
 
-    const organization = await Organization.getOrganizationMembership(organizationID);
+    const organization = await Organization.getOrganizationMembership(organizationID, demo_id);
     console.log(organization);
     if (!organization) {
         res.status(200).json({

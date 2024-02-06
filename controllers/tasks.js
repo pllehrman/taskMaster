@@ -6,7 +6,6 @@ const session = require('express-session');
 // This should get all tasks that apply to the user and have yet to be completed. It also takes a sort parameter.
 const getAllTasks = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id
-    console.log('hit controller.')
     let sortOption = req.query.sort || 'time_assigned'; // Default sorting
     let sortOrder = {};
     sortOrder[sortOption] = 1; 
@@ -138,12 +137,14 @@ const renderHistory = asyncWrapper(async (req,res) => {
 
 const createTask = asyncWrapper(async (req,res) => {
     const user_id = req.session.user_id
+    const demo_id = req.session.demo_id;
+
     const {name, description, organization, users, deadline, completed} = req.body
     
     const completedValue = completed == 'on';
 
     const task = await Task.create({name: name, description: description, organization: organization, assigner: user_id,
-                                    assignees: users, time_deadline: deadline, completed: completedValue });
+                                    assignees: users, time_deadline: deadline, completed: completedValue, demo_id: demo_id });
                              
 
     if (!task) {

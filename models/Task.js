@@ -48,7 +48,12 @@ const TaskSchema = new mongoose.Schema({
     completed: {
         type:Boolean, 
         default: false
-    }, 
+    },
+
+    demo_id: {
+        type:String,
+        required: [true, 'please provide a demo_id.']
+    }
     
 })
 

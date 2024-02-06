@@ -52,24 +52,24 @@ const OrganizationSchema = new mongoose.Schema({
         type:String,
         default: '/images/standard.png'
     },
-    fake: {
-        type:Boolean,
-        default: true
+    demo_id: {
+        type:String,
+        required: [true, 'please provide a demo_id.']
     }
 
 });
 
 // This returns all organizations either related to the user or not based on isMember argument.
-OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(currentUserId, isMember) {
+OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(currentUserId, isMember, demo_id) {
     const userId = mongoose.Types.ObjectId(currentUserId);
 
     let matchCondition = {};
     if (isMember) {
         // User is a member of the organization
-        matchCondition = { members: userId };
+        matchCondition = { members: userId, demo_id: demo_id };
     } else {
         // User is not a member of the organization
-        matchCondition = { members: { $ne: userId }, private: false};
+        matchCondition = { members: { $ne: userId }, private: false, demo_id: demo_id};
     }
 
     return this.aggregate([
@@ -158,13 +158,14 @@ OrganizationSchema.statics.getOrganizationWithDetails = async function(organizat
 };
 
 // This returns an organization with the names of all the members in an array.
-OrganizationSchema.statics.getOrganizationMembership = async function(organizationID) {
+OrganizationSchema.statics.getOrganizationMembership = async function(organizationID, demo_id) {
     const orgID = mongoose.Types.ObjectId(organizationID);
 
     return this.aggregate([
         {
             $match: {
-                _id: orgID // filters to include only the targeted organization
+                _id: orgID,
+                demo_id: demo_id// filters to include only the targeted organization
             }
         },
         {
@@ -190,8 +191,8 @@ OrganizationSchema.statics.getOrganizationMembership = async function(organizati
 };
 
 // This checks to see if there already exists an organization with the name in the DB.
-OrganizationSchema.statics.checkDuplicate = async function(name) {
-    const count = await this.countDocuments({name});
+OrganizationSchema.statics.checkDuplicate = async function(name, demo_id) {
+    const count = await this.countDocuments({name: name, demo_id: demo_id});
     return count > 0;
 };
 
