@@ -176,9 +176,40 @@
         <!-- Other buttons/actions can go here, e.g., a "Close" button or additional actions related to the task -->
     </div>
 </div>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
 
+        <p class="info-header">Live Task Dashboard:</p>
+        <p> This is your "Live Task" dasboard. Here, you'll be able to 
+            access all of the tasks which are currently uncompleted ('live') and potentially require your attention.
+        </p>
+
+        <p class="info-header">Task Groupings:</p>
+        <p> The tasks are segmented into three groups. In the first group, 
+            you can view the tasks which you have assigned. In the second group, you can view the tasks which have been 
+            assigned to you. Finally, the third group allows you to see the tasks for which you are directly responsible.
+        </p>
+
+        <p class="info-header">Marking Tasks:</p> 
+        <p>Marking tasks allows you to indicate that a task or tasks is 
+            complete. When you take tesponsibility for a task, you are indicating to the assigner and the assignees that
+            you are soley responsible for the task's completion. The blue refresh button in the top right of the page 
+            "refreshes" the dashboard allowing you to clear away completed tasks. If you have incorrectly marked a task 
+            as complete, you will need to retrieve it from the "Tasks History" dashboard.
+        </p>
+
+        <p class="info-header">Inspecting Tasks:</p>  
+        <p>  You can "inspect" the tasks to learn more about their details. 
+            Only if you are the assigner of a task, can you delete the task in its entirety. Additionally, if you have taken responsibility
+            for a task and are no longer able to complete it, you can "drop" the task. This is accomplished through the 
+            inspect button.
+        </p>
+    </div>
+</div>
 <script src="/js/checkBox.js"></script>
 <script src="/js/inspectModal.js"></script>
 <script src="/js/deleteTask.js"></script>
 <script src="/js/sortTasks.js"></script>
+<script src="/js/infoModal.js"></script>
     

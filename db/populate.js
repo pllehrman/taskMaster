@@ -36,25 +36,25 @@ const seedOrganizations = async (usersArr) => {
     await Organization.deleteMany();
     let organizations = []; // Array to store the created organizations
 
-    // Split users array into two halves
-    const halfwayPoint = Math.ceil(usersArr.length / 2);
-    const firstHalfUsers = usersArr.slice(0, halfwayPoint);
-    const secondHalfUsers = usersArr.slice(halfwayPoint);
+    // Function to get an array of 5 unique random users from usersArr
+    const getRandomUsers = (users, count) => {
+      let shuffled = users.slice().sort(() => 0.5 - Math.random()); // Shuffle the array
+      return shuffled.slice(0, count); // Get first `count` users
+    };
 
     // Assume jsonOrganizations is an array of organization data objects
     for (let i = 0; i < jsonOrganizations.length; i++) {
       const orgData = jsonOrganizations[i];
-      
-      // Determine which half of users should join this organization
-      const usersToJoin = i < 6 ? firstHalfUsers : secondHalfUsers;
 
-      // Set the first user of the relevant half as manager and founder
-      orgData.manager = usersToJoin[0]._id;
-      orgData.founder = usersToJoin[0]._id;
+      // Get a random group of 5 users for this organization
+      const randomUsers = getRandomUsers(usersArr, 5);
 
-      // Add the first 5 users of the relevant half as members
-      // This ensures the manager/founder, who is also the first user, is included
-      orgData.members = usersToJoin.slice(0, 5).map(user => user._id);
+      // Optionally, set the first random user as manager and founder
+      orgData.manager = randomUsers[0]._id;
+      orgData.founder = randomUsers[0]._id;
+
+      // Add the random users as members
+      orgData.members = randomUsers.map(user => user._id);
 
       const organization = new Organization(orgData);
       await organization.save();
@@ -68,7 +68,6 @@ const seedOrganizations = async (usersArr) => {
     process.exit(1);
   }
 };
-
 
 const seedTasks = async (users, organizations) => {
   try {
@@ -127,8 +126,6 @@ const seedTasks = async (users, organizations) => {
     process.exit(1);
   }
 };
-
-
 
 const startSeeding = async () => {
   try {

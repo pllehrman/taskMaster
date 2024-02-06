@@ -32,14 +32,6 @@ const getAllTasksByOrg = asyncWrapper( async (req, res) => {
     res.status(200).json({tasks})
 })
 
-// Creating a task through a form.
-const createTask = asyncWrapper( async (req,res) =>{
-    const { name, description} = req.body;
-    const task = await Task.create( {name, description, completed: false})
-
-    res.redirect('/task');
-})
-
 // Rendering the task form for creation
 const renderTaskForm = asyncWrapper( async (req,res) => {
     res.status(200).render('task/task_form');
@@ -142,6 +134,25 @@ const renderHistory = asyncWrapper(async (req,res) => {
     const tasks = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id, true);
 
     res.status(200).render('task/task_history', {tasks});
+})
+
+const createTask = asyncWrapper(async (req,res) => {
+    const user_id = req.session.user_id
+    const {name, description, organization, users, deadline, completed} = req.body
+    
+    const completedValue = completed == 'on';
+
+    const task = await Task.create({name: name, description: description, organization: organization, assigner: user_id,
+                                    assignees: users, time_deadline: deadline, completed: completedValue });
+                             
+
+    if (!task) {
+        req.flash('error', 'Unable to complete task. Please try again.');
+        res.status(200).redirect('tasks/new');
+    }
+    req.flash('success', 'Task has been created and assigned.');
+    res.status(200).redirect(`/organizations/${organization}`)
+
 })
 
 module.exports = {

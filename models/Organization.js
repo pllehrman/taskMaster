@@ -47,7 +47,16 @@ const OrganizationSchema = new mongoose.Schema({
     dateCreated: {
         type: Date,
         default: Date.now
+    },
+    logoUrl: {
+        type:String,
+        default: '/images/standard.png'
+    },
+    fake: {
+        type:Boolean,
+        default: true
     }
+
 });
 
 // This returns all organizations either related to the user or not based on isMember argument.
@@ -88,7 +97,8 @@ OrganizationSchema.statics.getAllOrganizationsWithDetails = async function(curre
                 members: 1, // keeps the organization members
                 managerName: '$managerDetails.name', // extracts the manager's name
                 founder: 1,
-                dateCreated: 1
+                dateCreated: 1,
+                logoUrl: 1
             }
         }
     ]);
@@ -140,7 +150,8 @@ OrganizationSchema.statics.getOrganizationWithDetails = async function(organizat
                 managerName: '$managerDetails.name', // Extracts the manager's name
                 founderName: '$founderDetails.name', // Extracts the founder's name
                 private: 1, // Keeps the privacy status
-                dateCreated: 1 // Keeps the date the organization was created
+                dateCreated: 1,
+                logoUrl: 1 
             }
         }
     ]);    
@@ -148,6 +159,62 @@ OrganizationSchema.statics.getOrganizationWithDetails = async function(organizat
 
 // This returns an organization with the names of all the members in an array.
 OrganizationSchema.statics.getOrganizationMembership = async function(organizationID) {
+    const orgID = mongoose.Types.ObjectId(organizationID);
+
+    return this.aggregate([
+        {
+            $match: {
+                _id: orgID // filters to include only the targeted organization
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'members',
+                foreignField: '_id',
+                as: 'memberDetails'
+            }
+        },
+        {
+            $unwind: {
+                path: '$memberDetails',
+                preserveNullAndEmptyArrays: true // Keeps organizations without a founder
+            }
+        },
+        {
+            $project: {
+                member: '$memberDetails', // Keeps the organization members
+            }
+        }
+    ]);   
+};
+
+// This checks to see if there already exists an organization with the name in the DB.
+OrganizationSchema.statics.checkDuplicate = async function(name) {
+    const count = await this.countDocuments({name});
+    return count > 0;
+};
+
+OrganizationSchema.statics.joinOrganization = async function(organizationId, memberObjectId) {
+    try {
+        const result = await this.findOneAndUpdate(
+            { _id: mongoose.Types.ObjectId(organizationId) },
+            { $addToSet: { members: mongoose.Types.ObjectId(memberObjectId) } }
+        );
+
+        if (result.modifiedCount === 0) {
+            console.log("Member was already in the organization or organization not found.");
+        } else {
+            console.log("Member was successfully added to the organization.");
+        }
+        return result;
+    } catch (error) {
+        console.error('Error adding member to the organization:', error);
+        throw error;
+    }
+};
+
+OrganizationSchema.statics.getAllOrganizationDetails = async function(organizationID) {
     const orgID = mongoose.Types.ObjectId(organizationID);
 
     return this.aggregate([
@@ -186,51 +253,27 @@ OrganizationSchema.statics.getOrganizationMembership = async function(organizati
         },
         {
             $lookup: {
-                from: 'users',
-                localField: 'members',
+                from: 'users', // For the founder
+                localField: 'members', // Adjusted for the founder
                 foreignField: '_id',
-                as: 'memberDetails'
+                as: 'memberDetails' // Array for founder details
             }
         },
         {
             $project: {
                 name: 1, // Keeps the organization name
                 description: 1, // Keeps the organization description
-                memberNames: '$memberDetails.name', // Keeps the organization members
-                managerName: '$managerDetails.name', // Extracts the manager's name
-                founderName: '$founderDetails.name', // Extracts the founder's name
+                managerDetails: 1, // Extracts the manager's details
+                founderDetails: 1, // Extracts the founder's details
+                memberDetails: 1, // Extracts the member details
                 private: 1, // Keeps the privacy status
-                dateCreated: 1 // Keeps the date the organization was created
+                dateCreated: 1,
+                logoUrl: 1 // Keeps the date the organization was created
             }
         }
-    ]);   
-};
-
-// This checks to see if there already exists an organization with the name in the DB.
-OrganizationSchema.statics.checkDuplicate = async function(name) {
-    const count = await this.countDocuments({name});
-    return count > 0;
-};
-
-OrganizationSchema.statics.joinOrganization = async function(organizationId, memberObjectId) {
-    try {
-        const result = await this.findOneAndUpdate(
-            { _id: mongoose.Types.ObjectId(organizationId) },
-            { $addToSet: { members: mongoose.Types.ObjectId(memberObjectId) } }
-        );
-
-        if (result.modifiedCount === 0) {
-            console.log("Member was already in the organization or organization not found.");
-        } else {
-            console.log("Member was successfully added to the organization.");
-        }
-        return result;
-    } catch (error) {
-        console.error('Error adding member to the organization:', error);
-        throw error;
-    }
-};
-
+    ]);  
+    
+}
 
 
 

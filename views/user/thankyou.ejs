@@ -1,14 +1,37 @@
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
 <div class="centered-section">
     <h1>Thank You for Trying Our Demo!</h1>
     <p class = "justify-text"> If you would like to return to your session later, please note down your Demo ID. If you forget your Demo ID,
         you can find next to the taskMaster logo in the top left.
     </p>
     <p><strong>Session ID:</strong> <%= demo_id %></p>
-    <p class = "justify-text"> As you try out this platform, please feel free to send feedback to through the Contact form which can be found
-        in the header. In order to speed up your demo experience, we've added you to a number of sample organizations 
-        which can be accessed through the Dashboard. From there, you'll be able to join new organizations, view the
-        the tasks associated with each organization, and assign tasks to others. In order to ensure a clean user 
-        experience, we have prevented this application from being interactive but can easily switch that a functionality
-        on. We hope you enjoy your experience here at taskMaster!
+    <p class = "justify-text"> As you try out this platform, please feel free to send feedback through the contact form which can be found
+        in the header. In order to speed up your demo experience, we've seeded your account with a number of sample organizations 
+        and tasks which can be accessed through the Dashboard. taskMaster revolves around five core functionalities:
+    </p>
+    <ul>
+        <li>Joining New Organizations</li>
+        <li>Viewing The Tasks of Each Oranization</li>
+        <li>Assigning Tasks to Others</li>
+        <li>Taking Responsibility for Tasks</li>
+        <li>Tracking Metrics Regarding Task Completion</li>
+    </ul>
+    <p> In order to ensure a clean user experience, we have prevented this application from being interactive with other 
+        users but can easily switch that a functionality on. We hope you enjoy your experience here at taskMaster!
+    </p>
+    <p> As you interact with the platform, keep an eye out for the informational button which will appear in the top left
+        of the page. By clicking on the informational button, you'll recieve tips on the key functionalities of the application.
     </p>
 </div>
+<button id="infoButton" class="base-icon info-button"><i class="fa-solid fa-circle-info"></i></button>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p> Thanks for clicking on the informational button. This is where you'll usually find information related to how
+            to take full advantage of this platform's capabilities.
+        </p>
+    </div>
+</div>
+<script src="/js/infoModal.js"></script>

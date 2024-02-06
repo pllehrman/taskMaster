@@ -5,12 +5,15 @@
     <div class ="organization-details-wrapper">
     <div class="organization-details-section">
         <div class="details">
+            <div class="center-image">
+                <img class="organization-image" src=<%= organization.logoUrl %> alt="Error displaying image.">
+            </div>
             <h3>Description:</h3>
             <p><%= organization.description %></p>
             <p><span class="p-bold">Privacy Status:  </span><%= organization.private ? 'Private' : 'Public' %></p>
-            <p><span class="p-bold">Total Members:  </span> <%= organization.memberNames ? organization.memberNames.length : '0' %></p>
-            <p><span class="p-bold">Manager:  </span> <%= organization.managerName %></p>
-            <p><span class="p-bold">Founder:  </span> <%= organization.founderName %></p>
+            <p><span class="p-bold">Total Members:  </span> <%= organization.memberDetails ? organization.memberDetails.length : '0' %></p>
+            <p><span class="p-bold">Manager:  </span> <%= organization.managerDetails ? organization.managerDetails.name : 'N/A' %></p>
+            <p><span class="p-bold">Founder:  </span> <%= organization.founderDetails ? organization.founderDetails.name : 'N/A' %></p>            
             <p><span class="p-bold">Date Founded:  </span> <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
         </div>
     </div>
@@ -19,14 +22,18 @@
         <div class="task-section">
             <h2>Membership:</h2>
             <ul class="member-list">
-                <% organization.memberNames.forEach(function(name) { %>
-                    <div class="member-item">
-                        <div class="center-info">
-                            <h2 class="task-title"><%= name %></h2>
-                        </div>
-                    </div>
-                <% }); %>
-            </ul>
+                <% if (organization.memberDetails && Array.isArray(organization.memberDetails)) { %>
+                    <% organization.memberDetails.forEach(function(member) { %>
+                        <li class="member-item"> <!-- Changed from div to li for semantic correctness -->
+                            <div class="center-info">
+                                <h2 class="task-title"><%= member.name %></h2>
+                            </div>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <li>No members found.</li>
+                <% } %>
+            </ul>            
         </div>
     </div>
 </div>

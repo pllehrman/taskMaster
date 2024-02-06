@@ -132,6 +132,10 @@ label {
     font-weight: bolder;
 }
 
+ul {
+    list-style-type: none; /* Removes bullet points */
+}
+
 
 /* SECTIONS */
 
@@ -189,6 +193,9 @@ section {
 }
 
 .organization-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     color: black;
     background-color: #f2f2f2;
@@ -212,7 +219,7 @@ section {
 .organization-name {
     text-align: center;
     font-weight: 900;
-    font-size: larger;
+    font-size: 1.6em;
 }
 
 .organization-index-details {
@@ -305,6 +312,10 @@ footer {
     bottom: 0;
     padding-bottom: 15px;
     width: 100%;
+}
+
+footer a {
+    color: white;
 }
 
 /* BUTTONS */
@@ -403,13 +414,13 @@ footer {
 }
 
 .bottom-left {
-    bottom: 75px;
+    bottom: 60px;
     left: 60px
 }
 
 .bottom-right {
     right: 60px;
-    bottom: 75px;
+    bottom: 60px;
 }
 
 .top-right {
@@ -527,15 +538,21 @@ footer {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,.4);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    position: fixed; /* Makes the modal content fixed on the screen */
+    top: 20%; /* Centers the modal vertically */
+    left: 50%; /* Centers the modal horizontally */
+    transform: translate(-50%, -50%); /* Adjusts the position to the exact center */
+    width: 50%; /* Adjust the width as needed */
+    max-width: 600px; /* Ensures the modal is not too wide on larger screens */
+    padding: 20px; /* Adds some padding inside the modal */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: Adds some shadow for depth */
+    background-color: white; /* Background color for the modal */
+    border-radius: 8px; /* Optional: Rounds the corners */
+    z-index: 1050; /* Ensures the modal is above other content */
 }
 
 .close {
@@ -572,6 +589,7 @@ footer {
     flex: 1; /* Takes up 2 fractions of the available space, making it larger */
     border-radius: 8px; /* Optional: rounds the corners */
     padding: 10px; /* Adds some padding inside the tasks section */
+    padding-left: 30px;
 }
 
 .organization-details-section {
@@ -837,6 +855,17 @@ footer {
 
 }
 
+.info-header {
+    color: white;
+    font-weight: bolder;
+    background-color: #0056b3; /* Light green background */
+    border-radius: 10px; /* Rounded corners for the bubble effect */
+    padding: 5px; /* Adds space inside the bubble */
+    margin: 2px 0; /* Optional: adds a little space above and below the span */
+    display: inline-block;
+    text-align: center;
+}
+
 /* Optionally: Style the button on hover/focus to give feedback to the user */
 .refresh-button:hover {
     color: #003875; /* Darker shade of blue */
@@ -849,17 +878,29 @@ footer {
 
 /* TASK FORM */
 
-select#users {
-    width: 100%; /* Full-width */
-    padding: 8px; /* Some padding */
-    margin-top: 5px; /* Space from the label */
-    border: 1px solid #ccc; /* Light grey border */
-    border-radius: 4px; /* Rounded borders */
-    background-color: white; /* White background color */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-    font-size: 16px; /* Slightly larger font size for readability */
-    cursor: pointer; /* Change cursor to indicate it's selectable */
+.task-form-section {
+    overflow-y: auto;
+    text-align: center;
+    max-width: 600px;
+    padding: 20px;
+    border: 2px solid green;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: auto; /* Center horizontally */
+    margin-top: 1vh; /* Center vertically on the page */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
+
+.task-form-section:hover {
+    border-color: darkgreen;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-form-section h1 {
+    margin-top: 0px;
+}
+
 
 /* Style for options - note: styling <option> directly is very limited in most browsers */
 select#users option {
@@ -881,15 +922,159 @@ input#deadline {
 /* Specific browsers use different UI for date pickers, 
    so customization options are limited without JavaScript-based solutions */
 
-   select#users:focus, input#deadline:focus {
-    border-color: #4A90E2; /* Highlight color when element is focused */
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5); /* Custom focus glow */
+/* Style the organization select */
+#organization-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f5f5f5;
 }
 
-select#users:hover, input#deadline:hover {
-    border-color: #aaa; /* Slightly darker border on hover */
+/* Style the "Assign to users" section */
+#assign-to-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+    max-height: 200px;
+    min-width: 30%;
+    overflow-y: auto;
 }
+
+/* Style the label for user checkboxes */
+#assign-to-container label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Style the user checkboxes */
+#users-checkboxes input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Style the user labels */
+#users-checkboxes label {
+
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+/* Add a border around users section */
+#users-checkboxes {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Organization Images */
+
+.organization-image {
+    max-height: 150px;
+}
+
+.center-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Dynamic scroll */
+
+.logos-container {
+    margin-top: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.logos {
+    display: flex;
+    animation: scrollLogo 10s linear infinite;
+}
+
+@keyframes scrollLogo {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-25%);
+    }
+}
+
+/* Example logo styling, adjust as needed */
+.logos img {
+    max-height: 150px; /* Adjust based on your needs */ 
+}
+
+.organization-scroll-box {
+    display: flex;
+    text-decoration: none;
+    color: black;
+    background-color: #f2f2f2;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Ensure uniform width */
+    height: 250px; /* Ensure uniform height */
+    margin: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+}
+
+
+.organization-scroll-box:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.trusted-partners {
+    text-align: center;
+    margin-top: 50px; /* Adjust as needed */
+    margin-bottom: 20px; /* Adjust as needed */
+    font-size: 24px; /* Adjust as needed */
+}
+
+.logos-container {
+    border: 3px solid #007BFF; /* Example: Solid blue border */
+    padding: 20px; /* Inner spacing */
+    margin: auto; /* Center the container */
+    width: 80%; /* Adjust as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow around the container */
+    border-radius: 10px; /* Optional: Rounds the corners of the border */
+    background-color: #f9f9f9; /* Optional: Light background color */
+    display: flex; /* Ensures logos are in a row */
+    flex-wrap: wrap; /* Allows logos to wrap within the container */
+    justify-content: center; /* Centers logos within the container */
+    gap: 20px; /* Space between logos */
+}
+
+.image-scroll {
+    max-width: 100%; /* Width relative to the parent container */
+    max-height: 100%; /* Height relative to the parent container */
+    object-fit: contain; 
+}
+
+.organization-scroll-name {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%; /* Ensure it doesn't overflow the box */
+    margin: 0 0 10px 0; /* Adjust spacing as needed */
+    font-size: 2.0em;
+}
+
 
 
 

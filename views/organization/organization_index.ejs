@@ -21,6 +21,7 @@
             <div class="organization-name">
                 <%= organization.name %>
             </div>
+            <img class="organization-image" src=<%= organization.logoUrl %> alt="Error displaying image.">
             <div class="organization-index-details">
                 <p>Manager: <%= organization.managerName %></p>
                 <p>Date Founded: <%= new Date(organization.dateCreated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
@@ -29,8 +30,22 @@
     <% }); %>
 </div>
 <button id="infoButton" class="base-icon info-button"><i class="fa-solid fa-circle-info"></i></button>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p class="info-header">Organization Dashboard:</p> 
+        <p> Here, you'll be able to access all of the organizations of which you are a member. Click on an organization 
+            below to inspect it's details.
+        </p>
+        <p class="info-header">Other Features:</p>
+        <p>  The bottom left button, "Live Tasks", will allow you to view a large aggregation of all the current tasks 
+            that pertain to you. The "Task History" button will allow you to view previously completed tasks.
+        </p>
+    </div>
+</div>
 <a href="/tasks" class='button-base bubble-button grey-bubble-button fixed-button bottom-left'>Live Tasks</a>
 <a href="/tasks/history" class='button-base bubble-button grey-bubble-button fixed-button bottom-right'>Task History</a>
+<script src="/js/infoModal.js"></script>
 
 
 

@@ -9,6 +9,8 @@ const getAllOrganizations = asyncWrapper( async (req,res) => {
     const user_id = req.session.user_id;
 
     const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true);
+    console.log(organizations);
+    
     res.status(200).render('organization/organization_index', { organizations });
 }) 
 
@@ -55,8 +57,9 @@ const renderJoinOrganization = asyncWrapper(async (req,res) => {
 const renderJoinSpecificOrganization = asyncWrapper(async (req,res) => {
     const org_id = req.params.id
 
-    const organizations = await Organization.getOrganizationMembership(org_id)
-    const organization = organizations[0]
+    const organizations = await Organization.getAllOrganizationDetails(org_id);
+    const organization = organizations[0];
+    console.log(organization);
 
     res.status(200).render('organization/organization_join_view', {organization})
 
@@ -92,7 +95,7 @@ const getOrganization = asyncWrapper(async (req,res,next) =>{
     const organization = organizations[0]
 
     const user_id = req.session.user_id
-    const tasksData = await Task.findTasksCategorizedByUserRoleWithUserDetails(user_id, false);
+    const tasksData = await Task.findTasksByOrganization(user_id, organizationID);
     const tasks = {
         asAssigner: tasksData.filter(task => task.assigner._id.equals(user_id)),
         asAssignee: tasksData.filter(task => 
@@ -110,29 +113,42 @@ const getOrganization = asyncWrapper(async (req,res,next) =>{
     res.status(200).render('organization/organization_view',{organization, tasks})
 })
 
-const updateOrganization = asyncWrapper(async (req,res) =>{
-    const {id:organizationID} = req.params
-    const organization = await Organization.findOneAndUpdate({_id: organizationID}, req.body, {
-        new:true,
-        runValidators:true
-    })
-    if(!organization) {
-        return next(createCustomError(`No organization with id: ${organizationID}`, 404))
-    }
+const organizationsAPI = asyncWrapper(async (req,res) => {
+    const user_id = req.session.user_id;
 
-    res.status(200).json({ organization })
-})
-
-const deleteOrganization = asyncWrapper(async (req,res) =>{
-    const {id:organizationID} = req.params
-    const organization = await organization.findOneAndDelete({_id:organizationID})
-    
-    if(!organization){
-        return next(createCustomError(`No organization with id: ${organizationID}`, 404))
+    const organizations = await Organization.getAllOrganizationsWithDetails(user_id, true);
+    if (!organizations) {
+        res.status(200).json({
+            success: false,
+            message: 'Unable to retrieve organizations',
+        })
     }
-    // res.status(200).json({ organization })
-    res.status(200).json({ organization: null, status: 'success'})
-})
+    res.status(200).json({
+        success: true,
+        message: 'Organizations retrieved.',
+        organizations: organizations
+    });
+
+});
+
+const organizationUsersAPI = asyncWrapper(async (req,res) => {
+    organizationID = req.params.id;
+
+    const organization = await Organization.getOrganizationMembership(organizationID);
+    console.log(organization);
+    if (!organization) {
+        res.status(200).json({
+            success: false,
+            message: 'Unable to retrieve organizations',
+        })
+    }
+    res.status(200).json({
+        success: true,
+        message: 'Organization members retrieved.',
+        organization: organization
+    });
+});
+
 
 module.exports =  {
     getAllOrganizations,
@@ -142,5 +158,7 @@ module.exports =  {
     renderJoinSelect,
     renderJoinOrganization,
     getOrganization,
-    renderJoinSpecificOrganization
+    renderJoinSpecificOrganization,
+    organizationUsersAPI,
+    organizationsAPI
 }

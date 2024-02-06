@@ -1,51 +1,62 @@
 [
     {
         "name": "Urban Development",
-        "description": "Investing in renewable energy"
+        "description": "Investing in renewable energy",
+        "logoUrl": "/images/urban-development.png"
     },
     {
         "name": "Cultural Exchange",
-        "description": "Bridging cultural gaps"
+        "description": "Bridging cultural gaps",
+        "logoUrl": "/images/cultural-exchange.png"
     },
     {
-        "name": "Finance First",
-        "description": "Leading in data-driven solutions"
+        "name": "Investing Club",
+        "description": "Leading in data-driven solutions",
+        "logoUrl": "/images/investing-club.png"
     },
     {
         "name": "Digital World",
-        "description": "Building a better future"
+        "description": "Building a better future",
+        "logoUrl": "/images/digital-world.png"
     },
     {
         "name": "Science Pioneers",
-        "description": "Championing mental health"
+        "description": "Championing mental health",
+        "logoUrl": "/images/science-pioneers.png"
     },
     {
         "name": "Global Connect",
-        "description": "Pioneering scientific research"
+        "description": "Pioneering scientific research",
+        "logoUrl": "/images/global-connect.png"
     },
     {
         "name": "Future Leaders",
-        "description": "Promoting sustainable practices"
+        "description": "Promoting sustainable practices",
+        "logoUrl": "/images/future-leaders.png"
     },
     {
-        "name": "Chuckle Factory",
-        "description": "Where laughter is the main product, and we take funny business seriously."
+        "name": "Standup Comedy",
+        "description": "Where laughter is the main product, and we take funny business seriously.",
+        "logoUrl": "/images/stand-up.png"
     },
     {
-        "name": "Pun-tastic Society",
-        "description": "We're here to pun-ish your sense of humor, one wordplay at a time."
+        "name": "Fishing Club",
+        "description": "Let's get outside and catch some fish! Invested in conservation of our environment.",
+        "logoUrl": "/images/fishing-club.png"
     },
     {
-        "name": "Clown College Alumni",
-        "description": "Once you've graduated from Clown College, you're never truly serious again."
+        "name": "NOSQL Org",
+        "description": "Let's explore non-relational databases. We're still trying to find a table or our club.",
+        "logoUrl": "/images/no-sql.png"
     },
     {
-        "name": "Sock Syndicate",
-        "description": "Our mission: promoting the joy of wearing mismatched, colorful socks."
+        "name": "Web Developers",
+        "description": "Currently learning the latest JavaScript library. Join to collab on projects.",
+        "logoUrl": "/images/web-developers.png"
     },
     {
-        "name": "Giggle Guild",
-        "description": "For those who believe that a good laugh can solve almost anything."
+        "name": "Foreign Policy",
+        "description": "Thinking about America's role on the global stage. Come to our next meeting for a lively discussion.",
+        "logoUrl": "/images/foreign-policy.png"
     }
-      
 ]

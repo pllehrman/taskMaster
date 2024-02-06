@@ -53,7 +53,7 @@ const TaskSchema = new mongoose.Schema({
 })
 
 // Static method to get tasks categorized by user role and whether the tasks been completed
-TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function(userId, complete, sortOption = { time_assigned: 1 }) {
+TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = async function(userId, complete, sortOption = { time_assigned: 1 }) {
     const currentUserId = mongoose.Types.ObjectId(userId);
 
     const matchCondition = {
@@ -122,6 +122,79 @@ TaskSchema.statics.findTasksCategorizedByUserRoleWithUserDetails = function(user
 
     return this.aggregate(pipeline);
 };
+
+TaskSchema.statics.findTasksByOrganization = async function(userId, organizationID) {
+
+    const currentUserId = mongoose.Types.ObjectId(userId);
+    const orgId = mongoose.Types.ObjectId(organizationID);
+
+    const matchCondition = {
+        completed: false,
+        $or: [
+            { ownership: currentUserId },
+            { assigner: currentUserId },
+            { assignees: currentUserId }
+        ], 
+        organization: orgId
+    };
+
+    // Build the aggregation pipeline
+    const pipeline = [
+        { $match: matchCondition },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'assigner',
+                foreignField: '_id',
+                as: 'assignerDetails'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'assignees',
+                foreignField: '_id',
+                as: 'assigneeDetails'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'ownership',
+                foreignField: '_id',
+                as: 'ownerDetails'
+            }
+        },
+        {
+            $lookup: {
+                from: 'organizations',
+                localField: 'organization',
+                foreignField: '_id',
+                as: 'organizationDetails'
+            }
+        },
+        { $unwind: { path: '$assignerDetails', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$ownerDetails', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$organizationDetails', preserveNullAndEmptyArrays: true } },
+        // Optionally keep or remove the $unwind for assigneeDetails based on your needs
+        {
+            $project: {
+                name: 1,
+                description: 1,
+                assigner: '$assignerDetails',
+                assignees: '$assigneeDetails', // Keeps all assignee details as an array
+                ownership: '$ownerDetails',
+                organization: '$organizationDetails',
+                time_assigned: 1,
+                time_deadline: 1,
+                completed: 1
+            }
+        }
+    ];
+
+    return this.aggregate(pipeline);
+
+}
 
 // Method to mark tasks as complete
 TaskSchema.statics.markTaskAsDone = async function(taskId, userId) {

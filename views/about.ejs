@@ -5,3 +5,14 @@
         and facilitate collaboration, taskMaster will help your team reach new 
         heights.</p>
 </div>
+<h2 class="trusted-partners">Some of Our Trusted Partners:</h2>
+<div class="logos-container">
+    <div class="logos">
+        <% organizations.forEach(function(organization) { %>
+            <div class="organization-scroll-box">
+                <p class="organization-scroll-name"><%= organization.name %></p>
+                <img class="image-scroll" src="<%= organization.logoUrl %>" alt="<%= organization.name %>">
+            </div>
+        <% }); %>
+    </div>
+</div>

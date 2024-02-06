@@ -18,6 +18,9 @@
     <div class ="organization-details-wrapper">
         <div class="organization-details-section">
             <div class="details">
+                <div class="center-image">
+                    <img class="organization-image" src=<%= organization.logoUrl %> alt="Error displaying image.">
+                </div>
                 <h3>Description:</h3>
                 <p><%= organization.description %></p>
                 <p><span class="p-bold">Privacy Status:  </span><%= organization.private ? 'Private' : 'Public' %></p>
@@ -181,9 +184,28 @@
         <!-- Other buttons/actions can go here, e.g., a "Close" button or additional actions related to the task -->
     </div>
 </div>
-
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p class = "info-header">Organization View:</p>
+        <p> This page allows you to view all the details associated with your organization and also see the filtered tasks
+            which pertain to you and this organization. This view also allows you to assign tasks within the organization.
+        </p>
+        <p class = "info-header">Assigning Tasks:</p>
+        <p> The "Assign a Task" button is in the bottom right of this view and allows you to issue a task to another member
+            of the organization. If you would like to test it's functionality, you can assign tasks to yourself as "reminders"
+            and interact with them.
+        </p>
+        <p class = "info-header">Task Function Supported</p>
+        <p> The filtered field of tasks supports the same kinds of functions seen on the "Live Tasks" dashboard. 
+            You can mark tasks, take responsibility for them, and inspect them. Completed tasks will be sent to the "Task History"
+            dashboard. Use the blue "refresh" button as you would on the "Live Tasks" dashboard!
+        </p>
+    </div>
+</div>
 
 <script src="/js/checkBox.js"></script>
 <script src="/js/inspectModal.js"></script>
 <script src="/js/deleteTask.js"></script>
+<script src="/js/infoModal.js"></script>
 
